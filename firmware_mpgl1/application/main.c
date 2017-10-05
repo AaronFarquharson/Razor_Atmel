@@ -75,8 +75,33 @@ void main(void)
   MessagingInitialize();
   UartInitialize();
   DebugInitialize();
+  
+  /*----------------------------------------------------------------------/
+  Function InitializeServer
 
-  /* Debug messages through DebugPrintf() are available from here */
+  Description:
+  Initializes a new server.  A new server has an empty tray of drinks and is
+  assigned the next number available.
+
+  Requires:
+    - psServer_ points to the server list where a new server is to be initialized; 
+      since the server list is a pointer to a linked list, this is a pointer-to-pointer
+    - Main_u8Servers holds the current number of active servers
+
+  Promises:
+    - Returns TRUE if the server is initialized
+    - Returns FALSE if the server cannot be initialized
+  */
+  bool InitializeServer(ServerType** psServer_)
+  {
+    if(*psServer_ == NULL)
+    {
+      return(FALSE);
+    }
+
+    return(TRUE);
+  } /* end InitializeServer() */
+    /* Debug messages through DebugPrintf() are available from here */
 
   SspInitialize();
   TWIInitialize();
