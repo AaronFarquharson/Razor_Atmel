@@ -34,6 +34,12 @@ typedef struct
 
 #define MAX_DRINKS (u8)10  /* Maximum number of drinks*/
 
+/*************************************************************************
+* Function declarations
+*************************************************************************/
+
+bool InitializeServer(ServerType* psServer_);
+
 /* G_u32ApplicationFlags definitions are in configuration.h */
 
 /* G_u32SystemFlags */
