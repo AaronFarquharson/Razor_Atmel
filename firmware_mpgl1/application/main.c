@@ -41,6 +41,22 @@ the 1ms period.
 
 void main(void)
 {
+  u8 u8Test = 0xA5;
+u8* pu8Example;
+u32 u32Test = 0x0000ffff;
+u32* pu32Example;
+
+/* Load the addresses into our pointer variables */
+pu8Example = &u8Test;
+pu32Example = &u32Test;
+
+/* Access the variables via the pointers (two different ways) */
+*pu8Example += 1;
+(*pu32Example)++;
+
+/* Move the pointers (watch out for the second one!) */
+pu8Example++;
+*pu32Example++;
   u32 au32BigArray[] = {5, 4, 3, 2, 1};
   DrinkType aeDrinkArray[3] = {BEER, SHOOTER};
   
