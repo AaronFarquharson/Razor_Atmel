@@ -16,10 +16,18 @@ Header file for main.c.
 #define FIRMWARE_SUB_REV1               '0'
 #define FIRMWARE_SUB_REV2               '1'
 
+/*********************************************************
+* Type Definitions
+**********************************************************/
+
+typedef enum {EMPTY, BEER, SHOOTER, WINE, HIBALL} DrinkType;
 
 /***********************************************************************************************************************
 * Constant Definitions
 ***********************************************************************************************************************/
+
+#define MAX_DRINKS (u8)10  /* Maximum number of drinks*/
+
 /* G_u32ApplicationFlags definitions are in configuration.h */
 
 /* G_u32SystemFlags */

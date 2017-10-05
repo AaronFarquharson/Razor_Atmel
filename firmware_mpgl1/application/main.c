@@ -41,6 +41,9 @@ the 1ms period.
 
 void main(void)
 {
+  u32 au32BigArray[] = {5, 4, 3, 2, 1};
+  DrinkType aeDrinkArray[3] = {BEER, SHOOTER};
+  
   G_u32SystemFlags |= _SYSTEM_INITIALIZING;
   // Check for watch dog restarts
 
