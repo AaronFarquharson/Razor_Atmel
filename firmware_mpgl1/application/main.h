@@ -21,6 +21,12 @@ Header file for main.c.
 **********************************************************/
 
 typedef enum {EMPTY, BEER, SHOOTER, WINE, HIBALL} DrinkType;
+typedef struct
+{
+  u8 u8ServerNumber;                    /* Unique token for this item */
+  DrinkType asServingTray[MAX_DRINKS];  /* Data payload array */
+  void* psNextServer;                   /* Pointer to next ServerType*/
+} ServerType;
 
 /***********************************************************************************************************************
 * Constant Definitions
