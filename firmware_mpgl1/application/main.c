@@ -132,6 +132,8 @@ void main(void)
   sServer1.u8ServerNumber = 18;
   u8CurrentServer = psServerParser->u8ServerNumber;
   
+  u32 u32Counter = 0;
+  
   /* Super loop */  
   while(1)
   {
@@ -162,6 +164,10 @@ void main(void)
     SystemSleep();
     HEARTBEAT_ON();
     
+    if(u32Counter == 10000)
+      break;
+    
+    u32Counter++;
   } /* end while(1) main super loop */
   
 } /* end main() */
