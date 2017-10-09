@@ -19,7 +19,7 @@
           
           
           
-        <Column0>342</Column0><Column1>27</Column1><Column2>27</Column2><Column3>27</Column3></ColumnWidths>
+        <Column0>139</Column0><Column1>27</Column1><Column2>27</Column2><Column3>27</Column3></ColumnWidths>
       </Workspace>
       <Disassembly>
         <col-names>
@@ -133,7 +133,7 @@
       <WATCH_4>
         <expressions>
           
-        <item/></expressions>
+        <item>u32Counter</item><item/></expressions>
         <col-names>
           
           
@@ -145,7 +145,7 @@
           
           
           
-        <item>100</item><item>150</item><item>100</item><item>100</item></col-widths>
+        <item>93</item><item>150</item><item>100</item><item>72</item></col-widths>
       </WATCH_4>
       <Locals>
         <col-names>
@@ -373,21 +373,21 @@
             <Factory>Locals</Factory>
           </Tab></Tabs>
         
-      <SelectedTab>3</SelectedTab></Wnd5></Windows>
+      <SelectedTab>0</SelectedTab></Wnd5></Windows>
     <Editor>
       
       
       
       
       
-    <Pane><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\application\main.c</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd><XPos2>0</XPos2><YPos2>59</YPos2><SelStart2>3985</SelStart2><SelEnd2>3985</SelEnd2></Tab><ActiveTab>0</ActiveTab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\..\firmware_mpg_common\application\user_app.c</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd><XPos2>0</XPos2><YPos2>88</YPos2><SelStart2>5592</SelStart2><SelEnd2>5592</SelEnd2></Tab></Pane><ActivePane>0</ActivePane><Pane><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\..\firmware_mpg_common\configuration.h</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd><XPos2>0</XPos2><YPos2>0</YPos2><SelStart2>1339</SelStart2><SelEnd2>1353</SelEnd2></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\..\firmware_mpg_common\application\debug.c</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd><XPos2>0</XPos2><YPos2>90</YPos2><SelStart2>7353</SelStart2><SelEnd2>7366</SelEnd2></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\..\firmware_mpg_common\drivers\sam3u_ssp.c</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd><XPos2>0</XPos2><YPos2>600</YPos2><SelStart2>26883</SelStart2><SelEnd2>26883</SelEnd2></Tab><ActiveTab>2</ActiveTab></Pane><Sizes><Pane><X>470588</X><Y>1000000</Y></Pane><Pane><X>529411</X><Y>1000000</Y></Pane></Sizes><SplitMode>4</SplitMode></Editor>
+    <Pane><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\..\firmware_mpg_common\application\user_app.c</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd><XPos2>0</XPos2><YPos2>88</YPos2><SelStart2>5592</SelStart2><SelEnd2>5592</SelEnd2></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\application\main.c</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd><XPos2>0</XPos2><YPos2>38</YPos2><SelStart2>2691</SelStart2><SelEnd2>2691</SelEnd2></Tab><ActiveTab>1</ActiveTab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\..\firmware_mpg_common\board_cstartup_iar.c</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd><XPos2>0</XPos2><YPos2>104</YPos2><SelStart2>5327</SelStart2><SelEnd2>5327</SelEnd2></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\bsp\mpgl1-ehdw-03.c</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd><XPos2>0</XPos2><YPos2>139</YPos2><SelStart2>7533</SelStart2><SelEnd2>7533</SelEnd2></Tab></Pane><ActivePane>0</ActivePane><Pane><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\..\firmware_mpg_common\configuration.h</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd><XPos2>0</XPos2><YPos2>0</YPos2><SelStart2>1339</SelStart2><SelEnd2>1353</SelEnd2></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\..\firmware_mpg_common\application\debug.c</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd><XPos2>0</XPos2><YPos2>90</YPos2><SelStart2>7353</SelStart2><SelEnd2>7366</SelEnd2></Tab><Tab><Factory>TextEditor</Factory><Filename>$WS_DIR$\..\..\firmware_mpg_common\drivers\sam3u_ssp.c</Filename><XPos>0</XPos><YPos>0</YPos><SelStart>0</SelStart><SelEnd>0</SelEnd><XPos2>0</XPos2><YPos2>600</YPos2><SelStart2>26790</SelStart2><SelEnd2>26790</SelEnd2></Tab><ActiveTab>2</ActiveTab></Pane><Sizes><Pane><X>509803</X><Y>1000000</Y></Pane><Pane><X>490196</X><Y>1000000</Y></Pane></Sizes><SplitMode>4</SplitMode></Editor>
     <Positions>
       
       
       
       
       
-    <Top><Row0><Sizes><Toolbar-00DAE790><key>iaridepm.enu1</key></Toolbar-00DAE790><Toolbar-083F88F0><key>debuggergui.enu1</key></Toolbar-083F88F0></Sizes></Row0></Top><Left><Row0><Sizes><Wnd1><Rect><Top>-2</Top><Left>-2</Left><Bottom>1028</Bottom><Right>433</Right><x>-2</x><y>-2</y><xscreen>157</xscreen><yscreen>196</yscreen><sizeHorzCX>61328</sizeHorzCX><sizeHorzCY>146707</sizeHorzCY><sizeVertCX>169922</sizeVertCX><sizeVertCY>770958</sizeVertCY></Rect></Wnd1></Sizes></Row0></Left><Right><Row0><Sizes><Wnd3><Rect><Top>-2</Top><Left>-2</Left><Bottom>615</Bottom><Right>835</Right><x>-2</x><y>-2</y><xscreen>157</xscreen><yscreen>196</yscreen><sizeHorzCX>61328</sizeHorzCX><sizeHorzCY>146707</sizeHorzCY><sizeVertCX>326953</sizeVertCX><sizeVertCY>461826</sizeVertCY></Rect></Wnd3><Wnd5><Rect><Top>0</Top><Left>0</Left><Bottom>0</Bottom><Right>7</Right><x>-2</x><y>613</y><xscreen>157</xscreen><yscreen>196</yscreen><sizeHorzCX>61328</sizeHorzCX><sizeHorzCY>146707</sizeHorzCY><sizeVertCX>326953</sizeVertCX><sizeVertCY>310629</sizeVertCY></Rect></Wnd5></Sizes></Row0></Right><Bottom><Row0><Sizes><Wnd0><Rect><Top>-2</Top><Left>-2</Left><Bottom>263</Bottom><Right>1346</Right><x>-2</x><y>-2</y><xscreen>1348</xscreen><yscreen>265</yscreen><sizeHorzCX>526563</sizeHorzCX><sizeHorzCY>198353</sizeHorzCY><sizeVertCX>61328</sizeVertCX><sizeVertCY>146707</sizeVertCY></Rect></Wnd0><Wnd2><Rect><Top>0</Top><Left>0</Left><Bottom>4279808</Bottom><Right>1598904064</Right><x>1344</x><y>-2</y><xscreen>1218</xscreen><yscreen>265</yscreen><sizeHorzCX>475781</sizeHorzCX><sizeHorzCY>198353</sizeHorzCY><sizeVertCX>61328</sizeVertCX><sizeVertCY>800150</sizeVertCY></Rect></Wnd2></Sizes></Row0></Bottom><Float><Sizes/></Float></Positions>
+    <Top><Row0><Sizes><Toolbar-055CB710><key>iaridepm.enu1</key></Toolbar-055CB710><Toolbar-1946B3C8><key>debuggergui.enu1</key></Toolbar-1946B3C8></Sizes></Row0></Top><Left><Row0><Sizes><Wnd1><Rect><Top>-2</Top><Left>-2</Left><Bottom>506</Bottom><Right>230</Right><x>-2</x><y>-2</y><xscreen>84</xscreen><yscreen>100</yscreen><sizeHorzCX>61493</sizeHorzCX><sizeHorzCY>145985</sizeHorzCY><sizeVertCX>169839</sizeVertCX><sizeVertCY>741606</sizeVertCY></Rect></Wnd1></Sizes></Row0></Left><Right><Row0><Sizes><Wnd3><Rect><Top>-2</Top><Left>-2</Left><Bottom>304</Bottom><Right>422</Right><x>-2</x><y>-2</y><xscreen>84</xscreen><yscreen>100</yscreen><sizeHorzCX>61493</sizeHorzCX><sizeHorzCY>145985</sizeHorzCY><sizeVertCX>310395</sizeVertCX><sizeVertCY>446715</sizeVertCY></Rect></Wnd3><Wnd5><Rect><Top>0</Top><Left>0</Left><Bottom>0</Bottom><Right>7</Right><x>-2</x><y>302</y><xscreen>84</xscreen><yscreen>100</yscreen><sizeHorzCX>61493</sizeHorzCX><sizeHorzCY>145985</sizeHorzCY><sizeVertCX>310395</sizeVertCX><sizeVertCY>297810</sizeVertCY></Rect></Wnd5></Sizes></Row0></Right><Bottom><Row0><Sizes><Wnd0><Rect><Top>-2</Top><Left>-2</Left><Bottom>134</Bottom><Right>719</Right><x>-2</x><y>-2</y><xscreen>721</xscreen><yscreen>136</yscreen><sizeHorzCX>527818</sizeHorzCX><sizeHorzCY>198540</sizeHorzCY><sizeVertCX>61493</sizeVertCX><sizeVertCY>145985</sizeVertCY></Rect></Wnd0><Wnd2><Rect><Top>0</Top><Left>0</Left><Bottom>6619245</Bottom><Right>7602241</Right><x>717</x><y>-2</y><xscreen>651</xscreen><yscreen>136</yscreen><sizeHorzCX>476574</sizeHorzCX><sizeHorzCY>198540</sizeHorzCY><sizeVertCX>61493</sizeVertCX><sizeVertCY>800000</sizeVertCY></Rect></Wnd2></Sizes></Row0></Bottom><Float><Sizes/></Float></Positions>
   </Desktop>
 </Project>
 

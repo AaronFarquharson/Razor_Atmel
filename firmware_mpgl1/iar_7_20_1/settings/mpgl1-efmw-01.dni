@@ -75,7 +75,8 @@ Stop=1
 Enabled=0
 ShowSource=1
 [Aliases]
-Count=0
+A0=_ "D:\MPG\mpg_source\Git\Razor_Atmel\firmware_mpg_common\board_cstartup_iar.c" "C:\Users\Farquharson\Documents\EiE\week2\Razor_Atmel\firmware_mpg_common\board_cstartup_iar.c"
+Count=1
 SuppressDialog=0
 [Simulator]
 Freq=10000000

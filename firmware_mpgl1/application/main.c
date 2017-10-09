@@ -132,7 +132,16 @@ void main(void)
   sServer1.u8ServerNumber = 18;
   u8CurrentServer = psServerParser->u8ServerNumber;
   
+  /* Assignment 2 initializations
+  */
+  
   u32 u32Counter = 0;
+  u8 u8solid = 0;
+  u8 u8oddcount = 1;
+  u8 u8evencount = 0;
+  u32 u32sum = 0;
+  double blink_rate = 1.024;
+  int increment = 1;
   
   /* Super loop */  
   while(1)
@@ -159,12 +168,42 @@ void main(void)
     //AudioTestRunActiveState();
     UserAppRunActiveState();
     
-    /* System sleep*/
-    HEARTBEAT_OFF();
-    SystemSleep();
-    HEARTBEAT_ON();
+    /* Code for assignment #2
+    * (blinking light)
+    */
     
-    if(u32Counter == 10000)
+    if(u32Counter == (((1/blink_rate)*1000*u8evencount)+u32sum))
+    {
+      HEARTBEAT_ON();
+      u32sum = u32Counter;
+    }
+    if(u32Counter == (((1/blink_rate)*1000*u8oddcount)+u32sum))
+    {
+      HEARTBEAT_OFF();
+      u32sum = u32Counter;
+    }
+    
+    if(u32Counter == (solid * 2000))
+    {
+      if(increment == 1)
+        blinkrate *= 2;
+      else
+        blinkrate /= 2;
+      
+      if(solid == 10 || solid == 0)
+        incriment *= -1;
+      solid += increment;
+    }
+    else
+      u32Counter++;
+       
+    
+    /* System sleep*/
+    //HEARTBEAT_OFF();
+    SystemSleep();
+    //HEARTBEAT_ON();
+    
+    if(u32Counter == 100000)
       break;
     
     u32Counter++;
