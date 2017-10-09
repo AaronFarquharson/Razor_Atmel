@@ -197,6 +197,8 @@ void main(void)
     else
       u32Counter++;
        
+    /*End of Assignment #2 code*/
+    
     
     /* System sleep*/
     //HEARTBEAT_OFF();
