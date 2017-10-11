@@ -60,6 +60,16 @@ Variable names shall start with "UserApp1_" and be declared as static.
 static fnCode_type UserApp1_StateMachine;            /* The state machine function pointer */
 //static u32 UserApp1_u32Timeout;                      /* Timeout counter used across states */
 
+/* Assignment 2 initializations
+  */
+  
+  u32 UserApp1_u32Counter = 0;
+  u8 UserApp1_u8solid = 0;
+  u8 UserApp1_u8oddcount = 1;
+  u8 UserApp1_u8evencount = 0;
+  u32 UserApp1_u32sum = 0;
+  double UserApp1_blink_rate = 1.024;
+  u4 UserApp1_increment = 1;
 
 /**********************************************************************************************************************
 Function Definitions
@@ -87,7 +97,36 @@ Promises:
 */
 void UserApp1Initialize(void)
 {
- 
+  /* Code for assignment #2
+    * (blinking light)
+    */
+    
+    if(u32Counter == (((1/blink_rate)*1000*u8evencount)+u32sum))
+    {
+      HEARTBEAT_ON();
+      u32sum = u32Counter;
+    }
+    if(u32Counter == (((1/blink_rate)*1000*u8oddcount)+u32sum))
+    {
+      HEARTBEAT_OFF();
+      u32sum = u32Counter;
+    }
+    
+    if(u32Counter == (solid * 2000))
+    {
+      if(increment == 1)
+        blinkrate *= 2;
+      else
+        blinkrate /= 2;
+      
+      if(solid == 10 || solid == 0)
+        incriment *= -1;
+      solid += increment;
+    }
+    else
+      u32Counter++;
+       
+    /*End of Assignment #2 code*/
   /* If good initialization, set state to Idle */
   if( 1 )
   {
