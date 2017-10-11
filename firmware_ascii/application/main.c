@@ -114,39 +114,7 @@ void main(void)
     /* Applications */
     UserApp1RunActiveState();
     UserApp2RunActiveState();
-    UserApp3RunActiveState();
-    
-    /* Code for assignment #2
-    * (blinking light)
-    */
-    
-    if(u32Counter == (((1/blink_rate)*1000*u8evencount)+u32sum))
-    {
-      HEARTBEAT_ON();
-      u32sum = u32Counter;
-    }
-    if(u32Counter == (((1/blink_rate)*1000*u8oddcount)+u32sum))
-    {
-      HEARTBEAT_OFF();
-      u32sum = u32Counter;
-    }
-    
-    if(u32Counter == (solid * 2000))
-    {
-      if(increment == 1)
-        blinkrate *= 2;
-      else
-        blinkrate /= 2;
-      
-      if(solid == 10 || solid == 0)
-        incriment *= -1;
-      solid += increment;
-    }
-    else
-      u32Counter++;
-       
-    /*End of Assignment #2 code*/
-    
+    UserApp3RunActiveState();    
     
     /* System sleep*/
     //HEARTBEAT_OFF();
@@ -155,8 +123,6 @@ void main(void)
     
     if(u32Counter == 100000)
       break;
-    
-    u32Counter++;
     
   } /* end while(1) main super loop */
   
