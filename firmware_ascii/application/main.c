@@ -74,17 +74,6 @@ void main(void)
   UserApp1Initialize();
   UserApp2Initialize();
   UserApp3Initialize();
-
-  /* Assignment 2 initializations
-  */
-  
-  u32 u32Counter = 0;
-  u8 u8solid = 0;
-  u8 u8oddcount = 1;
-  u8 u8evencount = 0;
-  u32 u32sum = 0;
-  double blink_rate = 1.024;
-  int increment = 1;
   
     
   /* Exit initialization */
@@ -120,9 +109,6 @@ void main(void)
     //HEARTBEAT_OFF();
     SystemSleep();
     //HEARTBEAT_ON();
-    
-    if(u32Counter == 100000)
-      break;
     
   } /* end while(1) main super loop */
   

@@ -107,13 +107,13 @@ void UserApp1Initialize(void)
     {
       HEARTBEAT_ON();
       UserApp1_u8evencount += 2;
-      u32sum = u32Counter;
+      UserApp1_u32sum = UserApp1_u32Counter;
     }
     if(UserApp1_u32Counter == (((1/UserApp1_blink_rate)*1000*UserApp1_u8oddcount)+UserApp1_u32sum))
     {
       HEARTBEAT_OFF();
       UserApp1_u8oddcount += 2;
-      u32sum = u32Counter;
+      UserApp1_u32sum = UserApp1_u32Counter;
     }
     
     if(UserApp1_u32Counter == (UserApp1_u8solid * 2000) && UserApp1_u32Counter != 0)
