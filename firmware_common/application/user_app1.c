@@ -99,38 +99,9 @@ void UserApp1Initialize(void)
   double UserApp1_blink_rate = 1.024;
   int UserApp1_increment = 1;
   
-  /* Code for assignment #2
-    * (blinking light)
-    */
-    
-    if(UserApp1_u32Counter == (((1/UserApp1_blink_rate)*1000*UserApp1_u8evencount)+UserApp1_u32sum))
-    {
-      HEARTBEAT_ON();
-      UserApp1_u8evencount += 2;
-      UserApp1_u32sum = UserApp1_u32Counter;
-    }
-    if(UserApp1_u32Counter == (((1/UserApp1_blink_rate)*1000*UserApp1_u8oddcount)+UserApp1_u32sum))
-    {
-      HEARTBEAT_OFF();
-      UserApp1_u8oddcount += 2;
-      UserApp1_u32sum = UserApp1_u32Counter;
-    }
-    
-    if(UserApp1_u32Counter == (UserApp1_u8solid * 2000) && UserApp1_u32Counter != 0)
-    {
-      if(UserApp1_increment == 1)
-        UserApp1_blink_rate *= 2;
-      else
-        UserApp1_blink_rate /= 2;
-      
-      if(UserApp1_u8solid == 10 || UserApp1_u8solid == 0)
-        UserApp1_increment *= -1;
-      UserApp1_u8solid += UserApp1_increment;
-    }
-    else
-      UserApp1_u32Counter++;
+
        
-    /*End of Assignment #2 code*/
+
     
   /* If good initialization, set state to Idle */
   if( 1 )
@@ -180,7 +151,38 @@ State Machine Function Definitions
 /* Wait for ??? */
 static void UserApp1SM_Idle(void)
 {
-
+/* Code for assignment #2
+    * (blinking light)
+    */
+    
+    if(UserApp1_u32Counter == (((1/UserApp1_blink_rate)*1000*UserApp1_u8evencount)+UserApp1_u32sum))
+    {
+      HEARTBEAT_ON();
+      UserApp1_u8evencount += 2;
+      UserApp1_u32sum = UserApp1_u32Counter;
+    }
+    if(UserApp1_u32Counter == (((1/UserApp1_blink_rate)*1000*UserApp1_u8oddcount)+UserApp1_u32sum))
+    {
+      HEARTBEAT_OFF();
+      UserApp1_u8oddcount += 2;
+      UserApp1_u32sum = UserApp1_u32Counter;
+    }
+    
+    if(UserApp1_u32Counter == (UserApp1_u8solid * 2000) && UserApp1_u32Counter != 0)
+    {
+      if(UserApp1_increment == 1)
+        UserApp1_blink_rate *= 2;
+      else
+        UserApp1_blink_rate /= 2;
+      
+      if(UserApp1_u8solid == 10 || UserApp1_u8solid == 0)
+        UserApp1_increment *= -1;
+      UserApp1_u8solid += UserApp1_increment;
+    }
+    else
+      UserApp1_u32Counter++;
+    
+    /*End of Assignment #2 code*/
 } /* end UserApp1SM_Idle() */
     
 
