@@ -150,9 +150,9 @@ static void UserApp1SM_Idle(void)
     * (blinking light)
     */
     
-    if(UserApp1_u32Counter == (((1/UserApp1_blink_rate)*1000*UserApp1_u8evencount)+UserApp1_u32sum))
+    /*if(UserApp1_u32Counter == (((1/UserApp1_blink_rate)*1000*UserApp1_u8evencount)+UserApp1_u32sum))
     {
-      HEARTBEAT_ON();
+      //HEARTBEAT_ON();
       UserApp1_u8evencount += 2;
       UserApp1_u32sum = UserApp1_u32Counter;
     }
@@ -175,8 +175,18 @@ static void UserApp1SM_Idle(void)
       UserApp1_u8solid += UserApp1_increment;
     }
     else
-      UserApp1_u32Counter++;
-    
+      UserApp1_u32Counter++;*/
+    if(UserApp1_u32counter == (500*UserApp1_u8evencount)
+    {
+      HEARTBEAT_ON();
+      UserApp1_u8evencount += 2;
+    }
+    if(UserApp1_u32counter == (500*UserApp1_u8oddcount)
+    {
+      HEARTBEAT_OFF();
+      UserApp1_u8oddcount += 2;
+    }
+    UserApp1_u32counter++;
     /*End of Assignment #2 code*/
 } /* end UserApp1SM_Idle() */
     
