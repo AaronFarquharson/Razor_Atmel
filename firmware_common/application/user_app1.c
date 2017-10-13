@@ -60,7 +60,16 @@ Variable names shall start with "UserApp1_" and be declared as static.
 static fnCode_type UserApp1_StateMachine;            /* The state machine function pointer */
 //static u32 UserApp1_u32Timeout;                      /* Timeout counter used across states */
 
-
+/* Assignment 2 initializations
+*/
+ 
+u32 UserApp1_u32Counter = 0;
+u8 UserApp1_u8solid = 0;
+u8 UserApp1_u8oddcount = 1;
+u8 UserApp1_u8evencount = 0;
+u32 UserApp1_u32sum = 0;
+double UserApp1_blink_rate = 1.024;
+int UserApp1_increment = 1;
 
 /**********************************************************************************************************************
 Function Definitions
@@ -88,20 +97,6 @@ Promises:
 */
 void UserApp1Initialize(void)
 {
-  /* Assignment 2 initializations
-  */
-  
-  u32 UserApp1_u32Counter = 0;
-  u8 UserApp1_u8solid = 0;
-  u8 UserApp1_u8oddcount = 1;
-  u8 UserApp1_u8evencount = 0;
-  u32 UserApp1_u32sum = 0;
-  double UserApp1_blink_rate = 1.024;
-  int UserApp1_increment = 1;
-  
-
-       
-
     
   /* If good initialization, set state to Idle */
   if( 1 )
