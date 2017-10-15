@@ -65,8 +65,8 @@ static fnCode_type UserApp1_StateMachine;            /* The state machine functi
  
 u32 UserApp1_u32Counter = 0;
 u8 UserApp1_u8solid = 0;
-u8 UserApp1_u8oddcount = 1;
-u8 UserApp1_u8evencount = 0;
+//u8 UserApp1_u8oddcount = 1;
+//u8 UserApp1_u8evencount = 0;
 u32 UserApp1_u32sum = 0;
 double UserApp1_blink_rate = 1.024;
 int UserApp1_increment = 1;
@@ -150,56 +150,21 @@ static void UserApp1SM_Idle(void)
     * (blinking light)
     */
     
-    /*if(UserApp1_u32Counter == (((1/UserApp1_blink_rate)*1000*UserApp1_u8evencount)+UserApp1_u32sum))
+    if(UserApp1_u32Counter < ((1000/UserApp1_blink_rate)+UserApp1_u32sum))
     {
-      //HEARTBEAT_ON();
-      UserApp1_u8evencount += 2;
-      UserApp1_u32sum = UserApp1_u32Counter;
+      HEARTBEAT_ON();
     }
-    if(UserApp1_u32Counter == (((1/UserApp1_blink_rate)*1000*UserApp1_u8oddcount)+UserApp1_u32sum))
+    if(UserApp1_u32Counter < ((2000/UserApp1_blink_rate)+UserApp1_u32sum) && UserApp1_u32Counter > ((1000/UserApp1_blink_rate)+UserApp1_u32sum))
     {
       HEARTBEAT_OFF();
-      UserApp1_u8oddcount += 2;
-      UserApp1_u32sum = UserApp1_u32Counter;
+      UserApp1_u32sum += (2000/UserApp1_blink_rate);
     }
-    
     if(UserApp1_u32Counter == (UserApp1_u8solid * 2000) && UserApp1_u32Counter != 0)
     {
       if(UserApp1_increment == 1)
         UserApp1_blink_rate *= 2;
       else
         UserApp1_blink_rate /= 2;
-      
-      if(UserApp1_u8solid == 10 || UserApp1_u8solid == 0)
-        UserApp1_increment *= -1;
-      UserApp1_u8solid += UserApp1_increment;
-    }
-    else
-      UserApp1_u32Counter++;*/
-    if(UserApp1_u32Counter <= (((1000/UserApp1_blink_rate)*UserApp1_u8evencount)+UserApp1_u32sum) && UserApp1_u32Counter >= (((1000/UserApp1_blink_rate)*UserApp1_u8oddcount)+UserApp1_u32sum))
-    {
-      HEARTBEAT_ON();
-    }
-    if(UserApp1_u32Counter <= (((1000/UserApp1_blink_rate)*UserApp1_u8oddcount)+UserApp1_u32sum) && UserApp1_u32Counter <= (((1000/UserApp1_blink_rate)*UserApp1_u8evencount)+UserApp1_u32sum))
-    {
-      HEARTBEAT_OFF();
-    }
-    if(UserApp1_u32Counter >= (((1000/UserApp1_blink_rate)*UserApp1_u8evencount)+UserApp1_u32sum))
-    {
-      UserApp1_u8evencount += 2;
-      UserApp1_u32sum = UserApp1_u32Counter;
-    }
-    if(UserApp1_u32Counter >= (((1000/UserApp1_blink_rate)*UserApp1_u8oddcount)+UserApp1_u32sum))
-    {
-      UserApp1_u8oddcount += 2;
-      UserApp1_u32sum = UserApp1_u32Counter;
-    }
-    if(UserApp1_u32Counter == (UserApp1_u8solid * 2000) && UserApp1_u32Counter != 0)
-    {
-      if(UserApp1_increment == 1)
-        UserApp1_blink_rate *= 6;
-      else
-        UserApp1_blink_rate /= 6;
       
       if(UserApp1_u8solid == 10 || UserApp1_u8solid == 0)
         UserApp1_increment *= -1;
