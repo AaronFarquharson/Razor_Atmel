@@ -35,6 +35,7 @@ Runs current task state.  Should only be called once in main loop.
 **********************************************************************************************************************/
 
 #include "configuration.h"
+#include "leds.h"
 
 /***********************************************************************************************************************
 Global variable definitions with scope across entire project.
@@ -59,6 +60,9 @@ Variable names shall start with "UserApp1_" and be declared as static.
 ***********************************************************************************************************************/
 static fnCode_type UserApp1_StateMachine;            /* The state machine function pointer */
 //static u32 UserApp1_u32Timeout;                      /* Timeout counter used across states */
+
+u32 u32counter = 0;
+int increment = 1;
 
 
 /**********************************************************************************************************************
@@ -87,7 +91,22 @@ Promises:
 */
 void UserApp1Initialize(void)
 {
- 
+   /* Initialize all unused LEDs to off */
+  LedOff(CYAN);
+  LedOff(GREEN);
+  LedOff(YELLOW);
+  LedOff(ORANGE);
+  
+  /* Turn on desired LEDs using the ON function */
+  LedOn(BLUE);
+  LedOn(PURPLE);
+
+  /* Set an LED to blink at 2Hz */
+  LedBlink(RED, LED_2HZ);
+
+  /* Set an LED to the dimmest state we have (5% duty cycle) */
+  LedPWM(WHITE, LED_PWM_5);
+  
   /* If good initialization, set state to Idle */
   if( 1 )
   {
@@ -136,7 +155,32 @@ State Machine Function Definitions
 /* Wait for ??? */
 static void UserApp1SM_Idle(void)
 {
-
+  static u16 u16BlinkCount = 0;
+  static LedRateType rate = LED_PWM_5;
+  
+  LedPWM(GREEN,rate);
+  
+  u32counter++;
+  if(u32counter == 40 && increment == 1)
+  {
+    u32counter = 0;
+    rate++;
+  }
+  if(u32counter == 40 && increment == -1)
+  {
+    u32counter = 0;
+    rate--;
+  }
+  if(rate == 100 || rate == 0)
+  {
+    increment *= -1;
+  }
+  u16BlinkCount++;
+  if(u16BlinkCount == 500)
+  {
+    u16BlinkCount = 0;
+    LedToggle(PURPLE);
+  }
 } /* end UserApp1SM_Idle() */
     
 
