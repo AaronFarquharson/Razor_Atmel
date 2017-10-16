@@ -150,7 +150,7 @@ static void UserApp1SM_Idle(void)
     * (blinking light)
     */
     
-    if(UserApp1_u32Counter < ((1000/UserApp1_blink_rate)+UserApp1_u32sum))
+    /*if(UserApp1_u32Counter < ((1000/UserApp1_blink_rate)+UserApp1_u32sum))
     {
       HEARTBEAT_ON();
     }
@@ -170,7 +170,15 @@ static void UserApp1SM_Idle(void)
         UserApp1_increment *= -1;
       UserApp1_u8solid += UserApp1_increment;
     }
-    UserApp1_u32Counter++;
+    UserApp1_u32Counter++;*/
+  if(UserApp1_u32Counter < 500 + UserApp1_u32sum)
+    HEARTBEAT_ON();
+  if(UserApp1_u32Counter < 1000 + UserApp1_u32sum && UserApp1_u32Counter > 500+UserApp1_u32sum)
+  {
+    HEARTBEAT_OFF();
+    UserApp1_u32sum += 1000;
+  }
+  UserApp1_u32Counter++;
     /*End of Assignment #2 code*/
 } /* end UserApp1SM_Idle() */
     
