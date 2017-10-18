@@ -100,11 +100,11 @@ void UserApp1Initialize(void)
   /* Turn on desired LEDs using the ON function */
   LedOn(BLUE);
   LedOn(PURPLE);
+  LedOn(YELLOW);
 
   /* Set an LED to blink at 2Hz */
   LedBlink(RED, LED_2HZ);
 
-  /* Set an LED to the dimmest state we have (5% duty cycle) */
   LedPWM(WHITE, LED_PWM_5);
   
   /* If good initialization, set state to Idle */
@@ -171,7 +171,7 @@ static void UserApp1SM_Idle(void)
     u32counter = 0;
     rate--;
   }
-  if(rate == 100 || rate == 0)
+  if(rate == LED_PWM_100 || rate == LED_PWM_0)
   {
     increment *= -1;
   }
