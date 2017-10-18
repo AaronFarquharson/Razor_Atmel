@@ -96,7 +96,6 @@ void UserApp1Initialize(void)
   LedOff(ORANGE);
   LedOff(RED);
   
-  LedBlink(YELLOW,LED_1HZ);
   
   /* If good initialization, set state to Idle */
   if( 1 )
