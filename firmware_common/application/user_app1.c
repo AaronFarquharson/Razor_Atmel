@@ -87,7 +87,17 @@ Promises:
 */
 void UserApp1Initialize(void)
 {
- 
+  LedOff(WHITE);
+  LedOff(PURPLE);
+  LedOff(BLUE);
+  LedOff(CYAN);
+  LedOff(GREEN);
+  LedOff(YELLOW);
+  LedOff(ORANGE);
+  LedOff(RED);
+  
+  LedBlink(YELLOW,LED_1HZ);
+  
   /* If good initialization, set state to Idle */
   if( 1 )
   {
@@ -136,7 +146,97 @@ State Machine Function Definitions
 /* Wait for ??? */
 static void UserApp1SM_Idle(void)
 {
-
+#if 0
+  static u32 u32IsCounter = 0;
+  static u32 u32WasCounter = 0;
+  static bool bYellowBlink = FALSE;
+  
+  
+  if(IsButtonPressed(BUTTON0))
+  {
+    u32IsCounter++;
+    LedOn(ORANGE);
+  }
+  else
+  {
+    LedOff(ORANGE);
+  }
+  if(WasButtonPressed(BUTTON1))
+  {
+    u32WasCounter++;
+    ButtonAcknowledge(BUTTON1);
+    if(bYellowBlink)
+    {
+      bYellowBlink = FALSE;
+      LedOff(YELLOW);
+    }
+    else
+    {
+      bYellowBlink = TRUE;
+      LedBlink(YELLOW, LED_8HZ);
+    }
+  }
+  if( IsButtonHeld(BUTTON3, 2000) )
+  {
+    LedOn(CYAN);
+  }
+  else
+  {
+    LedOff(CYAN);
+  }
+#endif
+  
+  
+  
+  static u8 u8case = 0;
+  static LedRateType frequency = LED_1HZ;
+  
+  
+  
+  
+  if(IsButtonPressed(BUTTON1))
+  {
+    LedOn(PURPLE);
+  }
+  else
+  {
+    LedOff(PURPLE);
+  }
+  if(IsButtonPressed(BUTTON2))
+  {
+    LedOn(BLUE);
+  }
+  else
+  {
+    LedOff(BLUE);
+  }
+  if(WasButtonPressed(BUTTON3))
+  {
+    ButtonAcknowledge(BUTTON3);
+    if(u8case == 4)
+    {
+      u8case = 0;
+    }
+    switch(u8case)
+    {
+    case 0:
+      frequency = LED_1HZ;
+      break;
+    case 1:
+      frequency = LED_2HZ;
+      break;
+    case 2:
+      frequency = LED_4HZ;
+      break;
+    case 3:
+      frequency = LED_8HZ;
+      break;
+    }
+    LedBlink(YELLOW,frequency);
+    u8case++;
+  }
+  
+  
 } /* end UserApp1SM_Idle() */
     
 
