@@ -62,7 +62,7 @@ static fnCode_type UserApp1_StateMachine;            /* The state machine functi
 //static u32 UserApp1_u32Timeout;                      /* Timeout counter used across states */
 
 u32 u32counter = 0;
-int increment = 1;
+int increment = -1;
 
 
 /**********************************************************************************************************************
@@ -104,8 +104,6 @@ void UserApp1Initialize(void)
 
   /* Set an LED to blink at 2Hz */
   LedBlink(RED, LED_2HZ);
-
-  LedPWM(WHITE, LED_PWM_5);
   
   /* If good initialization, set state to Idle */
   if( 1 )
@@ -156,24 +154,30 @@ State Machine Function Definitions
 static void UserApp1SM_Idle(void)
 {
   static u16 u16BlinkCount = 0;
-  static LedRateType rate = LED_PWM_5;
+  static LedRateType rate = LED_PWM_100;
   
-  LedPWM(GREEN,rate);
   
+  if((rate == LED_PWM_100 || rate == LED_PWM_0) && increment == 1)
+  {
+    increment = -1;
+  }
+  else if((rate == LED_PWM_100 || rate == LED_PWM_0) && increment == -1)
+  {
+    increment = 1;
+  }
   u32counter++;
-  if(u32counter == 40 && increment == 1)
+  if(u32counter == 40)
   {
+    LedPWM(GREEN,rate);
+    if(increment == 1)
+    {
+      rate++;
+    }
+    if(increment == -1)
+    {
+      rate--;
+    }
     u32counter = 0;
-    rate++;
-  }
-  if(u32counter == 40 && increment == -1)
-  {
-    u32counter = 0;
-    rate--;
-  }
-  if(rate == LED_PWM_100 || rate == LED_PWM_0)
-  {
-    increment *= -1;
   }
   u16BlinkCount++;
   if(u16BlinkCount == 500)
