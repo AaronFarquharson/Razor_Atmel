@@ -87,7 +87,14 @@ Promises:
 */
 void UserApp1Initialize(void)
 {
- 
+  LedOff(WHITE);
+  LedOff(PURPLE);
+  LedOff(BLUE);
+  LedOff(CYAN);
+  LedOff(GREEN);
+  LedOff(YELLOW);
+  LedOff(ORANGE);
+  LedOn(RED);
   /* If good initialization, set state to Idle */
   if( 1 )
   {
@@ -136,7 +143,62 @@ State Machine Function Definitions
 /* Wait for ??? */
 static void UserApp1SM_Idle(void)
 {
-
+  static u8 u8counter = 0;
+  static u8 u8correct = 2;
+  static int input[10];
+  static int passcode[10]= {0,2,3,2,3,2,1,1,0,3};
+  if(WasButtonPressed(BUTTON0))
+  {
+    ButtonAcknowledge(BUTTON0);
+    input[u8counter] = 0;
+    u8counter++;
+  }
+  if(WasButtonPressed(BUTTON1))
+  {
+    ButtonAcknowledge(BUTTON1);
+    input[u8counter] = 1;
+    u8counter++;
+  }
+  if(WasButtonPressed(BUTTON2))
+  {
+    ButtonAcknowledge(BUTTON2);
+    input[u8counter] = 2;
+    u8counter++;
+  }
+  if(WasButtonPressed(BUTTON3))
+  {
+    ButtonAcknowledge(BUTTON3);
+    input[u8counter] = 3;
+    u8counter++;
+  }
+  if(u8counter == 10)
+  {
+    for(int i = 0; i<10; i++)
+    {
+      if(input[i] != passcode[i])
+      {
+        u8correct = 0;
+      }
+      if(i ==9)
+      {
+        u8correct = 1;
+      }
+    }
+  }
+  if(u8correct == 1)
+  {
+    LedBlink(GREEN, LED_2HZ);
+    u8correct = 2;
+  }
+  if(WasButtonPressed(BUTTON0) || WasButtonPressed(BUTTON1) || WasButtonPressed(BUTTON2) || WasButtonPressed(BUTTON3))
+  {
+    LedOff(GREEN);
+    ButtonAcknowledge(BUTTON0);
+    ButtonAcknowledge(BUTTON1);
+    ButtonAcknowledge(BUTTON2);
+    ButtonAcknowledge(BUTTON3);
+  }
+  
 } /* end UserApp1SM_Idle() */
     
 
