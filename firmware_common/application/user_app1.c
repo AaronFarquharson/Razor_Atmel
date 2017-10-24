@@ -146,7 +146,7 @@ static void UserApp1SM_Idle(void)
   static u8 u8counter = 0;
   static u8 u8correct = 2;
   static int input[10];
-  static int passcode[10]= {0,2,3,2,3,2,1,1,0,3};
+  static int passcode[10]= {0,0,0,0,0,0,0,0,0,0};
   if(WasButtonPressed(BUTTON0))
   {
     ButtonAcknowledge(BUTTON0);
