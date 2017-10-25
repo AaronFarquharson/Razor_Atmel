@@ -60,16 +60,6 @@ Variable names shall start with "UserApp1_" and be declared as static.
 static fnCode_type UserApp1_StateMachine;            /* The state machine function pointer */
 //static u32 UserApp1_u32Timeout;                      /* Timeout counter used across states */
 
-/* Assignment 2 initializations
-*/
- 
-u32 UserApp1_u32Counter = 0;
-u8 UserApp1_u8solid = 0;
-//u8 UserApp1_u8oddcount = 1;
-//u8 UserApp1_u8evencount = 0;
-u32 UserApp1_u32sum = 0;
-double UserApp1_blink_rate = 1.024;
-int UserApp1_increment = 1;
 
 /**********************************************************************************************************************
 Function Definitions
@@ -146,39 +136,38 @@ State Machine Function Definitions
 /* Wait for ??? */
 static void UserApp1SM_Idle(void)
 {
-/* Code for assignment #2
-    * (blinking light)
-    */
+  static u32 UserApp1_u32Counter = 0;
+  static u8 UserApp1_u8solid = 0;
+  static u32 UserApp1_u32sum = 0;
+  static double UserApp1_blink_rate = 1.024;
+  static int UserApp1_increment = 1;
+
     
-    /*if(UserApp1_u32Counter < ((1000/UserApp1_blink_rate)+UserApp1_u32sum))
+    if(UserApp1_u32Counter < ((1000/UserApp1_blink_rate)+UserApp1_u32sum))
     {
       HEARTBEAT_ON();
     }
-    if(UserApp1_u32Counter < ((2000/UserApp1_blink_rate)+UserApp1_u32sum) && UserApp1_u32Counter > ((1000/UserApp1_blink_rate)+UserApp1_u32sum))
+    else if(UserApp1_u32Counter < ((2000/UserApp1_blink_rate)+UserApp1_u32sum) && UserApp1_u32Counter > ((1000/UserApp1_blink_rate)+UserApp1_u32sum))
     {
       HEARTBEAT_OFF();
       UserApp1_u32sum += (2000/UserApp1_blink_rate);
     }
-    if(UserApp1_u32Counter == (UserApp1_u8solid * 2000) && UserApp1_u32Counter != 0)
+    
+    if(UserApp1_u32Counter == (UserApp1_u8solid * 2000))
     {
-      if(UserApp1_increment == 1)
-        UserApp1_blink_rate *= 2;
-      else
-        UserApp1_blink_rate /= 2;
+      if(UserApp1_u32Counter != 0)
+      {
+        if(UserApp1_increment == 1)
+          UserApp1_blink_rate *= 2;
+        else
+          UserApp1_blink_rate /= 2;
       
-      if(UserApp1_u8solid == 10 || UserApp1_u8solid == 0)
-        UserApp1_increment *= -1;
+        if(UserApp1_u8solid == 10 || UserApp1_u8solid == 0)
+          UserApp1_increment *= -1;
+      }
       UserApp1_u8solid += UserApp1_increment;
     }
-    UserApp1_u32Counter++;*/
-  if(UserApp1_u32Counter < 500 + UserApp1_u32sum)
-    HEARTBEAT_ON();
-  if(UserApp1_u32Counter < 1000 + UserApp1_u32sum && UserApp1_u32Counter > 500+UserApp1_u32sum)
-  {
-    HEARTBEAT_OFF();
-    UserApp1_u32sum += 1000;
-  }
-  UserApp1_u32Counter++;
+    UserApp1_u32Counter++;
     /*End of Assignment #2 code*/
 } /* end UserApp1SM_Idle() */
     
