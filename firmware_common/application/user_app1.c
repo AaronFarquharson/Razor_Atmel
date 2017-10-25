@@ -159,7 +159,7 @@ static void UserApp1SM_Idle(void)
       {
         if(UserApp1_increment == 1)
           UserApp1_blink_rate *= 2;
-        else
+        else if(UserApp1_increment == -1)
           UserApp1_blink_rate /= 2;
       
         if(UserApp1_u8solid == 10 || UserApp1_u8solid == 0)
