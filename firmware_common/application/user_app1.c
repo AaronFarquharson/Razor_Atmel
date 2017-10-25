@@ -146,30 +146,67 @@ static void UserApp1SM_Idle(void)
   static u8 u8counter = 0;
   static u8 u8correct = 2;
   static int input[10];
-  static int passcode[10]= {0,0,0,0,0,0,0,0,0,0};
+  static int passcode[10]= {0,2,0,0,0,0,3,0,0,1};
+  
   if(WasButtonPressed(BUTTON0))
   {
     ButtonAcknowledge(BUTTON0);
-    input[u8counter] = 0;
+    if(u8counter < 10)
+    {
+      input[u8counter] = 0;
+    }
     u8counter++;
+    if(u8counter >= 11)
+    {
+      LedOff(GREEN);
+      LedOn(RED);
+      u8counter = 0;
+    }
   }
   if(WasButtonPressed(BUTTON1))
   {
     ButtonAcknowledge(BUTTON1);
-    input[u8counter] = 1;
+    if(u8counter < 10)
+    {
+      input[u8counter] = 1;
+    }
     u8counter++;
+    if(u8counter >= 11)
+    {
+      LedOff(GREEN);
+      LedOn(RED);
+      u8counter = 0;
+    }
   }
   if(WasButtonPressed(BUTTON2))
   {
     ButtonAcknowledge(BUTTON2);
-    input[u8counter] = 2;
+    if(u8counter < 10)
+    {
+      input[u8counter] = 2;
+    }
     u8counter++;
+    if(u8counter >= 11)
+    {
+      LedOff(GREEN);
+      LedOn(RED);
+      u8counter = 0;
+    }
   }
   if(WasButtonPressed(BUTTON3))
   {
     ButtonAcknowledge(BUTTON3);
-    input[u8counter] = 3;
+    if(u8counter < 10)
+    {
+      input[u8counter] = 3;
+    }
     u8counter++;
+    if(u8counter >= 11)
+    {
+      LedOff(GREEN);
+      LedOn(RED);
+      u8counter = 0;
+    }
   }
   if(u8counter == 10)
   {
@@ -178,6 +215,7 @@ static void UserApp1SM_Idle(void)
       if(input[i] != passcode[i])
       {
         u8correct = 0;
+        break;
       }
       if(i ==9)
       {
@@ -188,15 +226,15 @@ static void UserApp1SM_Idle(void)
   if(u8correct == 1)
   {
     LedBlink(GREEN, LED_2HZ);
+    LedOff(RED);
     u8correct = 2;
+    u8counter = 11;
   }
-  if(WasButtonPressed(BUTTON0) || WasButtonPressed(BUTTON1) || WasButtonPressed(BUTTON2) || WasButtonPressed(BUTTON3))
+  if(u8correct == 0)
   {
-    LedOff(GREEN);
-    ButtonAcknowledge(BUTTON0);
-    ButtonAcknowledge(BUTTON1);
-    ButtonAcknowledge(BUTTON2);
-    ButtonAcknowledge(BUTTON3);
+    LedBlink(RED, LED_2HZ);
+    u8correct = 2;
+    u8counter = 11;
   }
   
 } /* end UserApp1SM_Idle() */
