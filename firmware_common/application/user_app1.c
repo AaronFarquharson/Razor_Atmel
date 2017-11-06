@@ -145,10 +145,69 @@ static void UserApp1SM_Idle(void)
 {
   static u8 u8counter = 0;
   static u8 u8correct = 2;
+  static u8 u8pass_state = 0;
+  static u8 u8passcount = 0;
   static int input[10];
   static int passcode[10]= {0,2,0,0,0,0,3,0,0,1};
   
-  if(WasButtonPressed(BUTTON0))
+  //password reset code
+  
+  if(IsButtonHeld(BUTTON3, 3000) && u8pass_state == 0)
+  {
+    u8pass_state = 1;
+    u8passcount = 0;
+    LedBlink(GREEN, LED_4HZ);
+    LedBlink(RED, LED_4HZ);
+  }
+  
+  if(IsButtonHeld(BUTTON0, 3000) && u8pass_state == 1)
+  {
+    u8pass_state = 0;
+    u8counter = 0;
+    LedOff(GREEN);
+    LedOn(RED);
+  }
+  
+  if(WasButtonPressed(BUTTON0) && u8pass_state == 1)
+  {
+    ButtonAcknowledge(BUTTON0);
+    if(u8passcount < 10)
+    {
+      passcode[u8passcount] = 0;
+    }
+    u8passcount++;
+  }
+  if(WasButtonPressed(BUTTON1) && u8pass_state == 1)
+  {
+    ButtonAcknowledge(BUTTON1);
+    if(u8passcount < 10)
+    {
+      passcode[u8passcount] = 1;
+    }
+    u8passcount++;
+  }
+  if(WasButtonPressed(BUTTON2) && u8pass_state == 1)
+  {
+    ButtonAcknowledge(BUTTON2);
+    if(u8passcount < 10)
+    {
+      passcode[u8passcount] = 2;
+    }
+    u8passcount++;
+  }
+  if(WasButtonPressed(BUTTON3) && u8pass_state == 1)
+  {
+    ButtonAcknowledge(BUTTON3);
+    if(u8passcount < 10)
+    {
+      passcode[u8passcount] = 3;
+    }
+    u8passcount++;
+  }
+  
+  //password checking code
+  
+  if(WasButtonPressed(BUTTON0) && u8pass_state == 0)
   {
     ButtonAcknowledge(BUTTON0);
     if(u8counter < 10)
@@ -163,7 +222,7 @@ static void UserApp1SM_Idle(void)
       u8counter = 0;
     }
   }
-  if(WasButtonPressed(BUTTON1))
+  if(WasButtonPressed(BUTTON1) && u8pass_state == 0)
   {
     ButtonAcknowledge(BUTTON1);
     if(u8counter < 10)
@@ -178,7 +237,7 @@ static void UserApp1SM_Idle(void)
       u8counter = 0;
     }
   }
-  if(WasButtonPressed(BUTTON2))
+  if(WasButtonPressed(BUTTON2) && u8pass_state == 0)
   {
     ButtonAcknowledge(BUTTON2);
     if(u8counter < 10)
@@ -193,7 +252,7 @@ static void UserApp1SM_Idle(void)
       u8counter = 0;
     }
   }
-  if(WasButtonPressed(BUTTON3))
+  if(WasButtonPressed(BUTTON3) && u8pass_state == 0)
   {
     ButtonAcknowledge(BUTTON3);
     if(u8counter < 10)
@@ -208,7 +267,7 @@ static void UserApp1SM_Idle(void)
       u8counter = 0;
     }
   }
-  if(u8counter == 10)
+  if(u8counter == 10 && u8pass_state == 0)
   {
     for(int i = 0; i<10; i++)
     {
@@ -223,14 +282,14 @@ static void UserApp1SM_Idle(void)
       }
     }
   }
-  if(u8correct == 1)
+  if(u8correct == 1 && u8pass_state == 0)
   {
     LedBlink(GREEN, LED_2HZ);
     LedOff(RED);
     u8correct = 2;
     u8counter = 11;
   }
-  if(u8correct == 0)
+  if(u8correct == 0 && u8pass_state == 0)
   {
     LedBlink(RED, LED_2HZ);
     u8correct = 2;
