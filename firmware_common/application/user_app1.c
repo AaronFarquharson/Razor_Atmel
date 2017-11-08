@@ -50,7 +50,10 @@ extern volatile u32 G_u32SystemFlags;                  /* From main.c */
 extern volatile u32 G_u32ApplicationFlags;             /* From main.c */
 
 extern volatile u32 G_u32SystemTime1ms;                /* From board-specific source file */
-extern volatile u32 G_u32SystemTime1s;                 /* From board-specific source file */
+extern volatile u32 G_u32SystemTime1s;                /* From board-specific source file */
+
+extern u8 G_au8DebugScanfBuffer[];  /* From debug.c */
+extern u8 G_u8DebugScanfCharCount;  /* From debug.c */
 
 
 /***********************************************************************************************************************
@@ -60,6 +63,8 @@ Variable names shall start with "UserApp1_" and be declared as static.
 static fnCode_type UserApp1_StateMachine;            /* The state machine function pointer */
 //static u32 UserApp1_u32Timeout;                      /* Timeout counter used across states */
 
+/* Char buffer: */
+static u8 UserApp_au8UserInputBuffer[U16_USER_INPUT_BUFFER_SIZE  ];
 
 /**********************************************************************************************************************
 Function Definitions
@@ -87,7 +92,12 @@ Promises:
 */
 void UserApp1Initialize(void)
 {
- 
+  for(u16 i = 0; i < U16_USER_INPUT_BUFFER_SIZE  ; i++)
+  {
+    UserApp_au8UserInputBuffer[i] = 0;
+  }
+
+  
   /* If good initialization, set state to Idle */
   if( 1 )
   {
@@ -136,7 +146,39 @@ State Machine Function Definitions
 /* Wait for ??? */
 static void UserApp1SM_Idle(void)
 {
-
+  static u8 au8NumCharsMessage[] = "\n\rCharacters in buffer: ";
+  static u8 au8BufferMessage[]   = "\n\rBuffer contents:\n\r";
+  u8 u8CharCount;
+  
+  /* Print message with number of characters in scanf buffer */
+  if(WasButtonPressed(BUTTON0))
+  {
+    ButtonAcknowledge(BUTTON0);
+    
+    DebugPrintf(au8NumCharsMessage);
+    DebugPrintNumber(G_u8DebugScanfCharCount);
+    DebugLineFeed();
+  }
+  
+  if(WasButtonPressed(BUTTON1))
+  {
+    ButtonAcknowledge(BUTTON1);
+    
+    /* Read the buffer and print the contents */
+    u8CharCount = DebugScanf(UserApp_au8UserInputBuffer);
+    UserApp_au8UserInputBuffer[u8CharCount] = '\0';
+    DebugPrintf(au8BufferMessage);
+    /* Make sure there's at least one character in there! */
+    if(u8CharCount > 0)
+    {
+      DebugPrintf(UserApp_au8UserInputBuffer);
+      DebugLineFeed();
+    }
+    else
+    {
+      DebugPrintf("buffer empty");
+    }
+  }
 } /* end UserApp1SM_Idle() */
     
 
