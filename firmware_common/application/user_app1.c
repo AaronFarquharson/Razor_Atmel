@@ -143,12 +143,15 @@ State Machine Function Definitions
 /* Wait for ??? */
 static void UserApp1SM_Idle(void)
 {
-  static u8 u8counter = 0;
-  static u8 u8correct = 2;
   static u8 u8pass_state = 0;
   static u8 u8passcount = 0;
+  static u8 u8passlength = 3;
+  static u8 u8counter = 0;
+  static u8 u8readytocheck = 0;
+  static u8 u8correct = 2;
+  
   static int input[10];
-  static int passcode[10]= {0,2,0,0,0,0,3,0,0,1};
+  static int passcode[10]= {0,0,0};
   
   //password reset code
   
@@ -160,8 +163,15 @@ static void UserApp1SM_Idle(void)
     LedBlink(RED, LED_4HZ);
   }
   
-  if(IsButtonHeld(BUTTON0, 3000) && u8pass_state == 1)
+  if(WasButtonPressed(BUTTON3) && u8pass_state == 1)
   {
+    ButtonAcknowledge(BUTTON3);
+    u8passlength = u8passcount;
+    while(u8passcount < 10){
+      passcode[u8passcount] = 5;
+      u8passcount++;
+    }
+    u8passcount = 0;
     u8pass_state = 0;
     u8counter = 0;
     LedOff(GREEN);
@@ -174,8 +184,8 @@ static void UserApp1SM_Idle(void)
     if(u8passcount < 10)
     {
       passcode[u8passcount] = 0;
+      u8passcount++;
     }
-    u8passcount++;
   }
   if(WasButtonPressed(BUTTON1) && u8pass_state == 1)
   {
@@ -183,8 +193,8 @@ static void UserApp1SM_Idle(void)
     if(u8passcount < 10)
     {
       passcode[u8passcount] = 1;
+      u8passcount++;
     }
-    u8passcount++;
   }
   if(WasButtonPressed(BUTTON2) && u8pass_state == 1)
   {
@@ -192,17 +202,8 @@ static void UserApp1SM_Idle(void)
     if(u8passcount < 10)
     {
       passcode[u8passcount] = 2;
+      u8passcount++;
     }
-    u8passcount++;
-  }
-  if(WasButtonPressed(BUTTON3) && u8pass_state == 1)
-  {
-    ButtonAcknowledge(BUTTON3);
-    if(u8passcount < 10)
-    {
-      passcode[u8passcount] = 3;
-    }
-    u8passcount++;
   }
   
   //password checking code
@@ -210,73 +211,82 @@ static void UserApp1SM_Idle(void)
   if(WasButtonPressed(BUTTON0) && u8pass_state == 0)
   {
     ButtonAcknowledge(BUTTON0);
-    if(u8counter < 10)
+    if(u8counter < u8passlength)
     {
       input[u8counter] = 0;
     }
     u8counter++;
-    if(u8counter >= 11)
+    if(u8counter >= (u8passlength+2))
     {
       LedOff(GREEN);
       LedOn(RED);
+      input[0] = 5;
       u8counter = 0;
     }
   }
   if(WasButtonPressed(BUTTON1) && u8pass_state == 0)
   {
     ButtonAcknowledge(BUTTON1);
-    if(u8counter < 10)
+    if(u8counter < u8passlength)
     {
       input[u8counter] = 1;
     }
     u8counter++;
-    if(u8counter >= 11)
+    if(u8counter >= (u8passlength+2))
     {
       LedOff(GREEN);
       LedOn(RED);
+      input[0] = 5;
       u8counter = 0;
     }
   }
   if(WasButtonPressed(BUTTON2) && u8pass_state == 0)
   {
     ButtonAcknowledge(BUTTON2);
-    if(u8counter < 10)
+    if(u8counter < u8passlength)
     {
       input[u8counter] = 2;
     }
     u8counter++;
-    if(u8counter >= 11)
+    if(u8counter >= (u8passlength+2))
     {
       LedOff(GREEN);
       LedOn(RED);
+      input[0] = 5;
       u8counter = 0;
     }
   }
-  if(WasButtonPressed(BUTTON3) && u8pass_state == 0)
-  {
+  
+  
+  if(WasButtonPressed(BUTTON3) && u8pass_state == 0 && !IsButtonPressed(BUTTON3)){
     ButtonAcknowledge(BUTTON3);
-    if(u8counter < 10)
-    {
-      input[u8counter] = 3;
+    if(u8readytocheck == 0){
+      u8counter++;
     }
-    u8counter++;
-    if(u8counter >= 11)
-    {
+    if(u8counter < u8passlength+2){
+      u8readytocheck = 1;
+    }
+    if(u8counter >= (u8passlength+2)){
       LedOff(GREEN);
       LedOn(RED);
+      input[0] = 5;
       u8counter = 0;
     }
   }
-  if(u8counter == 10 && u8pass_state == 0)
+
+  if(u8readytocheck == 1 && u8pass_state == 0)
   {
-    for(int i = 0; i<10; i++)
+    if(u8passlength != u8counter-1){
+      u8correct = 0;
+    }
+    for(int i = 0; i<(u8passlength+1) && u8correct == 2; i++)
     {
-      if(input[i] != passcode[i])
+      if(input[i] != passcode[i] && i < u8passlength)
       {
         u8correct = 0;
         break;
       }
-      if(i ==9)
+      if(i == u8passlength)
       {
         u8correct = 1;
       }
@@ -286,14 +296,16 @@ static void UserApp1SM_Idle(void)
   {
     LedBlink(GREEN, LED_2HZ);
     LedOff(RED);
+    u8readytocheck = 0;
     u8correct = 2;
-    u8counter = 11;
+    u8counter = u8passlength+2;
   }
   if(u8correct == 0 && u8pass_state == 0)
   {
     LedBlink(RED, LED_2HZ);
+    u8readytocheck = 0;
     u8correct = 2;
-    u8counter = 11;
+    u8counter = u8passlength+2;
   }
   
 } /* end UserApp1SM_Idle() */
