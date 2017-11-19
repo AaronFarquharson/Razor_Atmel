@@ -52,6 +52,8 @@ extern volatile u32 G_u32ApplicationFlags;             /* From main.c */
 extern volatile u32 G_u32SystemTime1ms;                /* From board-specific source file */
 extern volatile u32 G_u32SystemTime1s;                 /* From board-specific source file */
 
+extern u8 G_au8DebugScanfBuffer[];  /* From debug.c */
+extern u8 G_u8DebugScanfCharCount;  /* From debug.c */
 
 /***********************************************************************************************************************
 Global variable definitions with scope limited to this local application.
@@ -62,6 +64,7 @@ static fnCode_type UserApp1_StateMachine;            /* The state machine functi
 
 /* Char buffer: */
 static u8 au8UserInputBuffer[U16_USER_INPUT_BUFFER_SIZE  ];
+static u8 au8UserInput[U16_USER_INPUT_BUFFER_SIZE  ];
 
 /**********************************************************************************************************************
 Function Definitions
@@ -143,7 +146,53 @@ State Machine Function Definitions
 /* Wait for ??? */
 static void UserApp1SM_Idle(void)
 {
-
+  static u16 charcount = 0;
+  static u16 asterisc = 100;
+  static char nameU[] = "AARON";
+  static char nameL[] = "aaron";
+  static u16 namecountnew = 99;
+  static u16 namecountold = 99;
+  static u8 charRead = 0;
+  charRead = DebugScanf(au8UserInputBuffer);
+  if(charRead){
+    au8UserInput[charcount] = au8UserInputBuffer[0];
+    charcount++;
+  }
+  
+  if(charcount > 4 && charRead){
+    for(int i = 0; nameU[i] != '\0'; i++){
+      if(au8UserInput[charcount - 5 + i] != nameU[i] && au8UserInput[charcount - 5 + i] != nameL[i]){
+        break;
+      }
+      if(i == 4){
+        namecountnew++;
+      }
+    }
+  }
+  
+  if(namecountnew != namecountold){
+    int i = 0;
+    if(namecountnew >= asterisc){
+      asterisc *= 10;
+    }
+    u16 temp = asterisc;
+    for(i; temp != 0; i++){
+      temp /= 10;
+    }
+    i++;
+    DebugPrintf("\r\n");
+    for(int j = 0; j < i; j++){
+      DebugPrintf("*");
+    }
+    DebugPrintf("\r\n*");
+    DebugPrintNumber(namecountnew);
+    DebugPrintf("*\r\n");
+    for(int j = 0; j < i; j++){
+      DebugPrintf("*");
+    }
+    DebugLineFeed();
+    namecountold = namecountnew;
+  }
 } /* end UserApp1SM_Idle() */
     
 
