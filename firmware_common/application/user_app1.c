@@ -74,6 +74,34 @@ Function Definitions
 /* Public functions                                                                                                   */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+int compareName( u16 count, u8 read)
+{
+  static char nameU[] = "AARON";
+  static char nameL[] = "aaron";
+  if(count > 4 && read){
+    for(int i = 0; nameU[i] != '\0'; i++){
+      if(au8UserInput[count - 5 + i] != nameU[i] && au8UserInput[count - 5 + i] != nameL[i]){
+        return 0;
+      }
+      if(i == 4){
+        return 1;
+      }
+    }
+  }
+  return 1;
+}
+
+
+int readBuffer(u16 *cCount)
+{
+  int charRead = DebugScanf(au8UserInputBuffer);
+  if(charRead){
+    au8UserInput[*cCount] = au8UserInputBuffer[0];
+    *cCount++;
+    return 1;
+  }
+  return 0;
+}
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* Protected functions                                                                                                */
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -148,17 +176,21 @@ static void UserApp1SM_Idle(void)
 {
   static u16 charcount = 0;
   static u16 asterisc = 10;
-  static char nameU[] = "AARON";
-  static char nameL[] = "aaron";
+  //static char nameU[] = "AARON";
+  //static char nameL[] = "aaron";
   static u16 namecountnew = 0;
   static u16 namecountold = 0;
   static u8 charRead = 0;
+  charRead = readBuffer(&charcount);
+#if 0
   charRead = DebugScanf(au8UserInputBuffer);
   if(charRead){
     au8UserInput[charcount] = au8UserInputBuffer[0];
     charcount++;
   }
-  
+#endif
+  namecountnew += compareName(charcount , charRead);
+#if 0
   if(charcount > 4 && charRead){
     for(int i = 0; nameU[i] != '\0'; i++){
       if(au8UserInput[charcount - 5 + i] != nameU[i] && au8UserInput[charcount - 5 + i] != nameL[i]){
@@ -169,7 +201,7 @@ static void UserApp1SM_Idle(void)
       }
     }
   }
-  
+#endif
   if(namecountnew != namecountold){
     int i = 0;
     if(namecountnew >= asterisc){

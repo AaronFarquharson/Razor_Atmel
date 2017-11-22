@@ -38,6 +38,13 @@ Function Declarations
 /* Public functions                                                                                                   */
 /*--------------------------------------------------------------------------------------------------------------------*/
 
+int compareName( u16 count, u8 read);
+//Promises:
+//      returns 1 if the name is the same and 0 if the name is different
+
+int readBuffer(u16* cCount);
+//Promises:
+//      returns 1 if a char is read from the buffer and 0 otherwise
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* Protected functions                                                                                                */
