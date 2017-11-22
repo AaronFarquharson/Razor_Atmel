@@ -147,11 +147,11 @@ State Machine Function Definitions
 static void UserApp1SM_Idle(void)
 {
   static u16 charcount = 0;
-  static u16 asterisc = 100;
+  static u16 asterisc = 10;
   static char nameU[] = "AARON";
   static char nameL[] = "aaron";
-  static u16 namecountnew = 99;
-  static u16 namecountold = 99;
+  static u16 namecountnew = 0;
+  static u16 namecountold = 0;
   static u8 charRead = 0;
   charRead = DebugScanf(au8UserInputBuffer);
   if(charRead){
