@@ -218,7 +218,7 @@ void LcdInitialize(void)
     LCD_CONTRAST_CMD, LCD_DISPLAY_SET_CMD, LCD_FOLLOWER_CMD 
   };
                  /* "012345567890123456789" */
-  u8 au8Welcome[] = "RAZOR SAM3U2 ASCII   ";
+  u8 au8Welcome[] = "AARON FARQUHARSON    ";
   
   /* State to Idle */
   Lcd_StateMachine = LcdSM_Idle;
@@ -243,7 +243,7 @@ void LcdInitialize(void)
 
   /* Blacklight - White */
   LedOn(LCD_RED);
-  LedOn(LCD_GREEN);
+  //LedOn(LCD_GREEN);
   LedOn(LCD_BLUE);
   
   TWI0WriteByte(LCD_ADDRESS, LCD_CONTROL_DATA, NO_STOP);
