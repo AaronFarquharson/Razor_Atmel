@@ -416,7 +416,7 @@ void LedInitialize(void)
 
 #ifdef EIE1
   LedOn(LCD_RED);
-  LedOn(LCD_GREEN);
+  //LedOn(LCD_GREEN);
   LedOn(LCD_BLUE);
 #endif
   
