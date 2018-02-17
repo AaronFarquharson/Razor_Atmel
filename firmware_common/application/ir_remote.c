@@ -1,22 +1,12 @@
 /**********************************************************************************************************************
-File: user_app1.c                                                                
+File: ir_remote.c                                                                
 
 ----------------------------------------------------------------------------------------------------------------------
-To start a new task using this user_app1 as a template:
- 1. Copy both user_app1.c and user_app1.h to the Application directory
- 2. Rename the files yournewtaskname.c and yournewtaskname.h
- 3. Add yournewtaskname.c and yournewtaskname.h to the Application Include and Source groups in the IAR project
- 4. Use ctrl-h (make sure "Match Case" is checked) to find and replace all instances of "user_app1" with "yournewtaskname"
- 5. Use ctrl-h to find and replace all instances of "UserApp1" with "YourNewTaskName"
- 6. Use ctrl-h to find and replace all instances of "USER_APP1" with "YOUR_NEW_TASK_NAME"
- 7. Add a call to YourNewTaskNameInitialize() in the init section of main
- 8. Add a call to YourNewTaskNameRunActiveState() in the Super Loop section of main
- 9. Update yournewtaskname.h per the instructions at the top of yournewtaskname.h
-10. Delete this text (between the dashed lines) and update the Description below to describe your task
+
 ----------------------------------------------------------------------------------------------------------------------
 
 Description:
-This is a user_app1.c file template 
+This is a ir_remote.c file template 
 
 ------------------------------------------------------------------------------------------------------------------------
 API:
@@ -25,10 +15,10 @@ Public functions:
 
 
 Protected System functions:
-void UserApp1Initialize(void)
+void ir_remoteInitialize(void)
 Runs required initialzation for the task.  Should only be called once in main init section.
 
-void UserApp1RunActiveState(void)
+void ir_remoteRunActiveState(void)
 Runs current task state.  Should only be called once in main loop.
 
 
@@ -38,10 +28,10 @@ Runs current task state.  Should only be called once in main loop.
 
 /***********************************************************************************************************************
 Global variable definitions with scope across entire project.
-All Global variable names shall start with "G_UserApp1"
+All Global variable names shall start with "G_ir_remote"
 ***********************************************************************************************************************/
 /* New variables */
-volatile u32 G_u32UserApp1Flags;                       /* Global state flags */
+volatile u32 G_u32ir_remoteFlags;                       /* Global state flags */
 
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -55,10 +45,12 @@ extern volatile u32 G_u32SystemTime1s;                 /* From board-specific so
 
 /***********************************************************************************************************************
 Global variable definitions with scope limited to this local application.
-Variable names shall start with "UserApp1_" and be declared as static.
+Variable names shall start with "ir_remote_" and be declared as static.
 ***********************************************************************************************************************/
-static fnCode_type UserApp1_StateMachine;            /* The state machine function pointer */
-//static u32 UserApp1_u32Timeout;                      /* Timeout counter used across states */
+static fnCode_type ir_remote_StateMachine;            /* The state machine function pointer */
+//static u32 ir_remote_u32Timeout;                      /* Timeout counter used across states */
+static int ir_toggle[4] = {0, 0, 0, 0};
+static int delay_code1, delay_code2, messagecount = 0;
 
 
 /**********************************************************************************************************************
@@ -68,13 +60,103 @@ Function Definitions
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* Public functions                                                                                                   */
 /*--------------------------------------------------------------------------------------------------------------------*/
-
+// This function sets the correct nibbles for the single output mode as defined by the protocol
+void singleOut( int mode, int power, int rb, int ch)
+{
+  int nibble1, nibble2, nibble3, nibble4;
+  
+  // set the nibbles
+  nibble1 = ir_toggle[ch] | ch;
+  nibble2 = 0x4 | mode | rb;
+  nibble3 = power;
+  nibble4 = 0xf ^ nibble1 ^ nibble2 ^ nibble3;
+  
+  pause(ch, messagecount);
+  send_signal((nibble1 << 4) | nibble2, (nibble3 << 4) | nibble4);
+  
+  if (ir_toggle[ch] == 0)
+        ir_toggle[ch] = 8;
+  else
+        ir_toggle[ch] = 0;
+}
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* Protected functions                                                                                                */
 /*--------------------------------------------------------------------------------------------------------------------*/
+// This function sends the ir signal from the board to the car
+void send_signal(int code1, int code2)
+{
+  if (code1 == delay_code1 && code2 == delay_code2) 
+    {
+        if (messagecount < 4)
+            messagecount++;
+    } else 
+    {
+        delay_code1 = code1;
+        delay_code2 = code2;
+        messagecount = 0;
+    }
+	
+    //cli(); // make it uninterruptable
+    start_stop_bit();
 
+    int x = 128;
+    while (x) {
+        oscillationWrite(_IR_Pin, 156);
+
+        if (code1 & x) //high bit
+            delayMicroseconds(546);
+        else //low bit
+            delayMicroseconds(260);
+
+        x >>= 1; //next bit
+    }
+
+    x = 128;
+    while (x) {
+        oscillationWrite(_IR_Pin, 156);
+
+        if (code2 & x) // high bit
+            delayMicroseconds(546);
+        else //low bit
+            delayMicroseconds(260);
+
+        x >>= 1; //next bit
+    }
+    start_stop_bit();
+    //sei();
+}
+
+// This function sends the codes to start the transmission and delays for the manditory time
+void start_stop_bit() {
+    oscillationWrite(_IR_Pin, 156);
+    delayMicroseconds(1014);
+}
+
+// This function actually sends the signal to the pin in the form of ones and zeros.
+void oscillationWrite(int pin, int time) {
+    for (int i = 0; i <= time / 26; i++) {
+        digitalWrite(pin, HIGH);
+        delayMicroseconds(9);
+        digitalWrite(pin, LOW);
+        delayMicroseconds(9);
+    }
+}
+
+// This function inplements the timeout for lost IR
+void pause(int channel, int count) {
+    unsigned char a = 0;
+
+    if (count == 0)
+        a = 4 - channel;
+    else if (count == 1 || count == 2)
+        a = 5;
+    else if (count == 3 || count == 4)
+        a = (6 + 2 * channel);
+
+    delay(a * 16);
+}
 /*--------------------------------------------------------------------------------------------------------------------
-Function: UserApp1Initialize
+Function: ir_remoteInitialize
 
 Description:
 Initializes the State Machine and its variables.
@@ -85,25 +167,25 @@ Requires:
 Promises:
   - 
 */
-void UserApp1Initialize(void)
+void ir_remoteInitialize(void)
 {
  
   /* If good initialization, set state to Idle */
   if( 1 )
   {
-    UserApp1_StateMachine = UserApp1SM_Idle;
+    ir_remote_StateMachine = ir_remoteSM_Idle;
   }
   else
   {
     /* The task isn't properly initialized, so shut it down and don't run */
-    UserApp1_StateMachine = UserApp1SM_Error;
+    ir_remote_StateMachine = ir_remoteSM_Error;
   }
 
-} /* end UserApp1Initialize() */
+} /* end ir_remoteInitialize() */
 
   
 /*----------------------------------------------------------------------------------------------------------------------
-Function UserApp1RunActiveState()
+Function ir_remoteRunActiveState()
 
 Description:
 Selects and runs one iteration of the current state in the state machine.
@@ -116,11 +198,11 @@ Requires:
 Promises:
   - Calls the function to pointed by the state machine function pointer
 */
-void UserApp1RunActiveState(void)
+void ir_remoteRunActiveState(void)
 {
-  UserApp1_StateMachine();
+  ir_remote_StateMachine();
 
-} /* end UserApp1RunActiveState */
+} /* end ir_remoteRunActiveState */
 
 
 /*--------------------------------------------------------------------------------------------------------------------*/
@@ -134,18 +216,18 @@ State Machine Function Definitions
 
 /*-------------------------------------------------------------------------------------------------------------------*/
 /* Wait for ??? */
-static void UserApp1SM_Idle(void)
+static void ir_remoteSM_Idle(void)
 {
 
-} /* end UserApp1SM_Idle() */
+} /* end ir_remoteSM_Idle() */
     
 
 /*-------------------------------------------------------------------------------------------------------------------*/
 /* Handle an error */
-static void UserApp1SM_Error(void)          
+static void ir_remoteSM_Error(void)          
 {
   
-} /* end UserApp1SM_Error() */
+} /* end ir_remoteSM_Error() */
 
 
 

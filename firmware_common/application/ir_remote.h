@@ -1,24 +1,17 @@
 /**********************************************************************************************************************
-File: user_app1.h                                                                
+File: ir_remote.h                                                                
 
 ----------------------------------------------------------------------------------------------------------------------
-To start a new task using this user_app1 as a template:
-1. Follow the instructions at the top of user_app1.c
-2. Use ctrl-h to find and replace all instances of "user_app1" with "yournewtaskname"
-3. Use ctrl-h to find and replace all instances of "UserApp1" with "YourNewTaskName"
-4. Use ctrl-h to find and replace all instances of "USER_APP1" with "YOUR_NEW_TASK_NAME"
-5. Add #include yournewtaskname.h" to configuration.h
-6. Add/update any special configurations required in configuration.h (e.g. peripheral assignment and setup values)
-7. Delete this text (between the dashed lines)
+
 ----------------------------------------------------------------------------------------------------------------------
 
 Description:
-Header file for user_app1.c
+Header file for ir_remote.c
 
 **********************************************************************************************************************/
 
-#ifndef __USER_APP1_H
-#define __USER_APP1_H
+#ifndef __IR_REMOTE_H
+#define __IR_REMOTE_H
 
 /**********************************************************************************************************************
 Type Definitions
@@ -28,7 +21,33 @@ Type Definitions
 /**********************************************************************************************************************
 Constants / Definitions
 **********************************************************************************************************************/
+//singleOut PWM powers and modes
+#define PWM_FLT 0x0
+#define PWM_FWD1 0x1
+#define PWM_FWD2 0x2
+#define PWM_FWD3 0x3
+#define PWM_FWD4 0x4
+#define PWM_FWD5 0x5
+#define PWM_FWD6 0x6
+#define PWM_FWD7 0x7
+#define PWM_BRK 0x8
+#define PWM_REV7 0x9
+#define PWM_REV6 0xA
+#define PWM_REV5 0xB
+#define PWM_REV4 0xC
+#define PWM_REV3 0xD
+#define PWM_REV2 0xE
+#define PWM_REV1 0xf
 
+//channels
+#define CH1 0x0
+#define CH2 0x1
+#define CH3 0x2
+#define CH4 0x3
+
+//SingleOutput output
+#define DRIVE 0x0
+#define TURN 0x1
 
 /**********************************************************************************************************************
 Function Declarations
@@ -37,14 +56,17 @@ Function Declarations
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* Public functions                                                                                                   */
 /*--------------------------------------------------------------------------------------------------------------------*/
-
+void singleOut( int mode, int power, int rb, int ch);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* Protected functions                                                                                                */
 /*--------------------------------------------------------------------------------------------------------------------*/
-void UserApp1Initialize(void);
-void UserApp1RunActiveState(void);
-
+void ir_remoteInitialize(void);
+void ir_remoteRunActiveState(void);
+void send_signal(int code1, int code2);
+void oscillationWrite(int pin, int time);
+void start_stop_bit();
+void pause(int ch, int count);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* Private functions                                                                                                  */
@@ -54,12 +76,12 @@ void UserApp1RunActiveState(void);
 /***********************************************************************************************************************
 State Machine Declarations
 ***********************************************************************************************************************/
-static void UserApp1SM_Idle(void);    
+static void ir_remoteSM_Idle(void);    
 
-static void UserApp1SM_Error(void);         
+static void ir_remoteSM_Error(void);         
 
 
-#endif /* __USER_APP1_H */
+#endif /* __IR_REMOTE_H */
 
 
 /*--------------------------------------------------------------------------------------------------------------------*/

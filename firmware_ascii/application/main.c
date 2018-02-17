@@ -71,7 +71,7 @@ void main(void)
 
   /* Application initialization */
 
-  UserApp1Initialize();
+  ir_remoteInitialize();
   UserApp2Initialize();
   UserApp3Initialize();
 
@@ -101,7 +101,7 @@ void main(void)
     SdCardRunActiveState();
 
     /* Applications */
-    UserApp1RunActiveState();
+    ir_remoteRunActiveState();
     UserApp2RunActiveState();
     UserApp3RunActiveState();
     

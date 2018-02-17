@@ -489,7 +489,7 @@ counter must be set at 1280. */
     16 [1] PA_16_BLADE_CS PIO control enabled
 
     15 [0] PA_15_BLADE_SCK PIO control not enabled
-    14 [0] PA_14_BLADE_MOSI PIO control not enabled
+    14 [1] PA_14_BLADE_MOSI PIO control not enabled
     13 [0] PA_13_BLADE_MISO PIO control not enabled
     12 [0] PA_12_BLADE_UPOMI PIO control not enabled
 
