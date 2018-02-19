@@ -466,7 +466,7 @@ counter must be set at 1280. */
 0: No effect
 1: Pin is controlled by PIO
 */
-#define PIOA_PER_INIT (u32)0x84030007
+#define PIOA_PER_INIT (u32)0x84034007
 /* 
     31 [1] PA_31_HEARTBEAT PIO control enabled
     30 [0] PA_30_AN_DEMO PIO control not enabled
@@ -489,7 +489,7 @@ counter must be set at 1280. */
     16 [1] PA_16_BLADE_CS PIO control enabled
 
     15 [0] PA_15_BLADE_SCK PIO control not enabled
-    14 [1] PA_14_BLADE_MOSI PIO control not enabled
+    14 [1] PA_14_BLADE_MOSI PIO control enabled
     13 [0] PA_13_BLADE_MISO PIO control not enabled
     12 [0] PA_12_BLADE_UPOMI PIO control not enabled
 
@@ -557,7 +557,7 @@ counter must be set at 1280. */
 0: No effect
 1: Pin is controlled by corresponding peripheral
 */
-#define PIOA_PDR_INIT (u32)0x7BFCFFF8
+#define PIOA_PDR_INIT (u32)0x7BFCBFF8
 /* 
     31 [0] PA_31_HEARTBEAT not controlled by peripheral
     30 [1] PA_30_AN_DEMO controlled by peripheral
@@ -580,7 +580,7 @@ counter must be set at 1280. */
     16 [0] PA_16_BLADE_CS not controlled by peripheral
 
     15 [1] PA_15_BLADE_SCK controlled by peripheral
-    14 [1] PA_14_BLADE_MOSI controlled by peripheral
+    14 [0] PA_14_BLADE_MOSI not controlled by peripheral
     13 [1] PA_13_BLADE_MISO controlled by peripheral
     12 [1] PA_12_BLADE_UPOMI controlled by peripheral
 
@@ -1874,7 +1874,7 @@ Tdiv_slclk = 2*(DIV+1)*Tslow_clock.
 0: No effect
 1: Enables writing PIO_ODSR for the I/O line.
 */
-#define PIOA_OWER_INIT (u32)0xB4010000
+#define PIOA_OWER_INIT (u32)0xB4014000
 /* 
     31 [1] PA_31_HEARTBEAT write enabled
     30 [0] PA_30_AN_DEMO
@@ -1897,7 +1897,7 @@ Tdiv_slclk = 2*(DIV+1)*Tslow_clock.
     16 [1] PA_16_BLADE_CS write enabled
 
     15 [0] PA_15_BLADE_SCK
-    14 [0] PA_14_BLADE_MOSI
+    14 [1] PA_14_BLADE_MOSI write enabled
     13 [0] PA_13_BLADE_MISO
     12 [0] PA_12_BLADE_UPOMI
 
