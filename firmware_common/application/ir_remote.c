@@ -79,6 +79,20 @@ void singleOut( int mode, int power, int rb, int ch)
   else
         ir_toggle[ch] = 0;
 }
+
+
+// This function writes the input pin to the input level, given the input for the current level
+void writePin(u32 pin, u8 level)
+{
+  // set the level to output high
+  if(level == HIGH){
+    AT91C_BASE_PIOA->PIO_SODR |= pin;
+  }
+  else{
+    AT91C_BASE_PIOA->PIO_CODR |= pin;
+  }  
+}
+
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* Protected functions                                                                                                */
 /*--------------------------------------------------------------------------------------------------------------------*/

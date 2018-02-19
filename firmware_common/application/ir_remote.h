@@ -21,7 +21,7 @@ Type Definitions
 /**********************************************************************************************************************
 Constants / Definitions
 **********************************************************************************************************************/
-//singleOut PWM powers and modes
+// singleOut PWM powers and modes
 #define PWM_FLT 0x0
 #define PWM_FWD1 0x1
 #define PWM_FWD2 0x2
@@ -39,15 +39,20 @@ Constants / Definitions
 #define PWM_REV2 0xE
 #define PWM_REV1 0xf
 
-//channels
+// channels
 #define CH1 0x0
 #define CH2 0x1
 #define CH3 0x2
 #define CH4 0x3
 
-//SingleOutput output
+// SingleOutput output
 #define DRIVE 0x0
 #define TURN 0x1
+
+// Pin output
+#define HIGH 1
+#define LOW 0
+#define MOSI         (u32)0x00004000
 
 /**********************************************************************************************************************
 Function Declarations
@@ -57,6 +62,7 @@ Function Declarations
 /* Public functions                                                                                                   */
 /*--------------------------------------------------------------------------------------------------------------------*/
 void singleOut( int mode, int power, int rb, int ch);
+void writePin(u32 pin, u8 level);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* Protected functions                                                                                                */
