@@ -44,7 +44,14 @@ void UserApp2RunActiveState(void);
 State Machine Declarations
 ***********************************************************************************************************************/
 static void UserApp2SM_Idle(void);    
-
+static void ir_remoteSM_fwd(void);
+static void ir_remoteSM_bck(void);
+static void ir_remoteSM_rht(void);
+static void ir_remoteSM_lft(void);
+static void ir_remoteSM_fwd_rht(void);
+static void ir_remoteSM_fwd_lft(void);
+static void ir_remoteSM_bck_rht(void);
+static void ir_remoteSM_bck_lft(void);
 static void UserApp2SM_Error(void);         
 static void UserApp2SM_FailedInit(void);        
 

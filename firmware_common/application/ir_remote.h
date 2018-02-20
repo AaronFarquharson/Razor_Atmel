@@ -84,7 +84,6 @@ void startStopSignal(u16 start);
 State Machine Declarations
 ***********************************************************************************************************************/
 static void ir_remoteSM_Idle(void);    
-
 static void ir_remoteSM_Error(void);         
 
 

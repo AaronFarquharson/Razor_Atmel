@@ -22,6 +22,7 @@ Runs current task state.  Should only be called once in main loop.
 
 #include "configuration.h"
 #include "ir_remote.h"
+#include "user_app2.h"
 
 /***********************************************************************************************************************
 Global variable definitions with scope across entire project.
@@ -75,6 +76,7 @@ Promises:
 */
 void UserApp2Initialize(void)
 {
+  LedOn(RED);
   /* If good initialization, set state to Idle */
   if( 1 )
   {
@@ -119,27 +121,181 @@ void UserApp2RunActiveState(void)
 State Machine Function Definitions
 **********************************************************************************************************************/
 
+/* in this state, the car is only moving forward */
+static void UserApp2SM_fwd(void)
+{
+  // if button 0 is no longer pressed, stop moving, and go back to idle
+  if(!IsButtonPressed(BUTTON0)){
+    LedOn(RED);
+    LedOff(GREEN);
+    UserApp2_StateMachine = UserApp2SM_Idle;
+  }
+  
+  // if button 2 is pressed, turn left, and go to new state
+  if(IsButtonPressed(BUTTON2)){
+    UserApp2_StateMachine = UserApp2SM_fwd_lft;
+  }
+  // if button 3 is pressed, turn right, and go to new state
+  if(IsButtonPressed(BUTTON3)){
+    UserApp2_StateMachine = UserApp2SM_fwd_rht;
+  }  
+}
+
+/* in this state, the car is only moving backward */
+static void UserApp2SM_bck(void)
+{
+  // if button 1 is no longer pressed, stop moving, and go back to idle
+  if(!IsButtonPressed(BUTTON1)){
+    LedOn(RED);
+    LedOff(BLUE);
+    UserApp2_StateMachine = UserApp2SM_Idle;
+  }
+  
+  // if button 2 is pressed, turn left, and go to new state
+  if(IsButtonPressed(BUTTON2)){
+    UserApp2_StateMachine = UserApp2SM_bck_lft;
+  }
+  // if button 3 is pressed, turn right, and go to new state
+  if(IsButtonPressed(BUTTON3)){
+    UserApp2_StateMachine = UserApp2SM_bck_rht;
+  } 
+}
+
+/* in this state, the car is only turning left */
+static void UserApp2SM_lft(void)
+{
+  // if button 2 is no longer pressed, stop turning, and go back to idle
+  if(!IsButtonPressed(BUTTON2)){
+    LedOn(RED);
+    LedOff(PURPLE);
+    UserApp2_StateMachine = UserApp2SM_Idle;
+  }
+  
+  // if button 0 is pressed, go forward, and go to new state
+  if(IsButtonPressed(BUTTON0)){
+    UserApp2_StateMachine = UserApp2SM_fwd_lft;
+  }
+  // if button 1 is pressed, go backward, and go to new state
+  if(IsButtonPressed(BUTTON1)){
+    UserApp2_StateMachine = UserApp2SM_bck_lft;
+  } 
+}
+
+/* in this state, the car is only turning right */
+static void UserApp2SM_rht(void)
+{
+  // if button 3 is no longer pressed, stop turning, and go back to idle
+  if(!IsButtonPressed(BUTTON3)){
+    LedOn(RED);
+    LedOff(YELLOW);
+    UserApp2_StateMachine = UserApp2SM_Idle;
+  }
+  
+  // if button 0 is pressed, go forward, and go to new state
+  if(IsButtonPressed(BUTTON0)){
+    UserApp2_StateMachine = UserApp2SM_fwd_rht;
+  }
+  // if button 1 is pressed, go backward, and go to new state
+  if(IsButtonPressed(BUTTON1)){
+    UserApp2_StateMachine = UserApp2SM_bck_rht;
+  }
+}
+
+/* in this state, the car is moving forward and turning right */
+static void UserApp2SM_fwd_rht(void)
+{
+  // if button 3 is no longer pressed, stop turning, and go back to another state
+  if(!IsButtonPressed(BUTTON3)){
+    UserApp2_StateMachine = UserApp2SM_fwd;
+  }
+  // if button 0 is no longer pressed, stop moving, and go back to another state
+  if(!IsButtonPressed(BUTTON0)){
+    UserApp2_StateMachine = UserApp2SM_rht;
+  }
+}
+
+/* in this state, the car is moving forward and turning left */
+static void UserApp2SM_fwd_lft(void)
+{
+  // if button 2 is no longer pressed, stop turning, and go back to another state
+  if(!IsButtonPressed(BUTTON2)){
+    UserApp2_StateMachine = UserApp2SM_fwd;
+  }
+  // if button 0 is no longer pressed, stop moving, and go back to another state
+  if(!IsButtonPressed(BUTTON0)){
+    UserApp2_StateMachine = UserApp2SM_lft;
+  }
+}
+
+/* in this state, the car is moving backward and turning right */
+static void UserApp2SM_bck_rht(void)
+{
+  // if button 3 is no longer pressed, stop turning, and go back to another state
+  if(!IsButtonPressed(BUTTON3)){
+    UserApp2_StateMachine = UserApp2SM_bck;
+  }
+  // if button 1 is no longer pressed, stop moving, and go back to another state
+  if(!IsButtonPressed(BUTTON1)){
+    UserApp2_StateMachine = UserApp2SM_rht;
+  }
+}
+
+/* in this state, the car is moving backward and turning left */
+static void UserApp2SM_bck_lft(void)
+{
+  // if button 2 is no longer pressed, stop turning, and go back to another state
+  if(!IsButtonPressed(BUTTON2)){
+    UserApp2_StateMachine = UserApp2SM_bck;
+  }
+  // if button 1 is no longer pressed, stop moving, and go back to another state
+  if(!IsButtonPressed(BUTTON1)){
+    UserApp2_StateMachine = UserApp2SM_lft;
+  }
+}
+
+
 /*-------------------------------------------------------------------------------------------------------------------*/
 /* Wait for ??? */
 static void UserApp2SM_Idle(void)
 {
-  static u16 start = 8000;
+  if(IsButtonPressed(BUTTON0)){
+    LedOn(GREEN);
+    LedOff(RED);
+    UserApp2_StateMachine = UserApp2SM_fwd;
+  }
+  if(IsButtonPressed(BUTTON1)){
+    LedOn(BLUE);
+    LedOff(RED);
+    UserApp2_StateMachine = UserApp2SM_bck;
+  }
+  if(IsButtonPressed(BUTTON2)){
+    LedOn(PURPLE);
+    LedOff(RED);
+    UserApp2_StateMachine = UserApp2SM_lft;
+  }
+  if(IsButtonPressed(BUTTON3)){
+    LedOn(YELLOW);
+    LedOff(RED);
+    UserApp2_StateMachine = UserApp2SM_rht;
+  }
+#if 0
+  static u16 start = 7000;
   if(IsButtonPressed(BUTTON0)){
     LedOff(RED);
     LedOn(GREEN);
     singleOut(0, PWM_FWD7, DRIVE, CH1, 8062);
-    start++;
   }
   if(IsButtonPressed(BUTTON1)){
     LedOff(RED);
     LedOn(BLUE);
-    singleOut(0, PWM_REV7, DRIVE, CH1, start);
+    singleOut(0, PWM_REV7, DRIVE, CH1, 7775);
   }
   if(IsButtonPressed(BUTTON2)){
-    singleOut(0, PWM_REV7, TURN, CH1, start);
+    singleOut(0, PWM_REV7, TURN, CH1, 7890);
   }
   if(IsButtonPressed(BUTTON3)){
-    singleOut(0, PWM_FWD7, TURN, CH1, start);
+    singleOut(0, PWM_FWD7, TURN, CH1, 7219);
+    start++;
   }
   else{
     LedOn(RED);
@@ -148,6 +304,7 @@ static void UserApp2SM_Idle(void)
     singleOut(0, PWM_BRK, DRIVE, CH1, start);
     singleOut(0, PWM_BRK, TURN, CH1, start);
   }
+#endif
 } /* end UserApp2SM_Idle() */
      
 #if 0
