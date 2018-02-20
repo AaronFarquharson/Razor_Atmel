@@ -52,7 +52,7 @@ Constants / Definitions
 // Pin output
 #define HIGH 1
 #define LOW 0
-#define MOSI         (u32)0x00004000
+#define IR_PIN         (u32)0x00004000          // MOSI
 
 /**********************************************************************************************************************
 Function Declarations
@@ -61,18 +61,19 @@ Function Declarations
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* Public functions                                                                                                   */
 /*--------------------------------------------------------------------------------------------------------------------*/
-void singleOut( int mode, int power, int rb, int ch);
+void singleOut( u8 mode, u8 power, u8 rb, u8 ch, u16 start);
 void writePin(u32 pin, u8 level);
+void delayMicro(u16 time, u16 start);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* Protected functions                                                                                                */
 /*--------------------------------------------------------------------------------------------------------------------*/
 void ir_remoteInitialize(void);
 void ir_remoteRunActiveState(void);
-void send_signal(int code1, int code2);
-void oscillationWrite(int pin, int time);
-void start_stop_bit();
-void pause(int ch, int count);
+void send_signal(u32 code1, u32 code2, u16 start);
+void writeSignal(u32 pin, u32 time, u16 start);
+void startStopSignal(u16 start);
+//void pause(u8 ch, u8 count);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* Private functions                                                                                                  */

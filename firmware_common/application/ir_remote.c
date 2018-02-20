@@ -52,7 +52,6 @@ static fnCode_type ir_remote_StateMachine;            /* The state machine funct
 static int ir_toggle[4] = {0, 0, 0, 0};
 static int delay_code1, delay_code2, messagecount = 0;
 
-
 /**********************************************************************************************************************
 Function Definitions
 **********************************************************************************************************************/
@@ -61,7 +60,7 @@ Function Definitions
 /* Public functions                                                                                                   */
 /*--------------------------------------------------------------------------------------------------------------------*/
 // This function sets the correct nibbles for the single output mode as defined by the protocol
-void singleOut( int mode, int power, int rb, int ch)
+void singleOut( u8 mode, u8 power, u8 rb, u8 ch, u16 start)
 {
   int nibble1, nibble2, nibble3, nibble4;
   
@@ -71,8 +70,8 @@ void singleOut( int mode, int power, int rb, int ch)
   nibble3 = power;
   nibble4 = 0xf ^ nibble1 ^ nibble2 ^ nibble3;
   
-  pause(ch, messagecount);
-  send_signal((nibble1 << 4) | nibble2, (nibble3 << 4) | nibble4);
+  //pause(ch, messagecount);
+  send_signal((nibble1 << 4) | nibble2, (nibble3 << 4) | nibble4, start);
   
   if (ir_toggle[ch] == 0)
         ir_toggle[ch] = 8;
@@ -93,71 +92,81 @@ void writePin(u32 pin, u8 level)
   }  
 }
 
+// This function should delay the code for a given time in microseconds
+void delayMicro(u16 time, u16 start)
+{
+  int runs = (int)(((double)time * (double)start) / (double)1000);
+  for(int i = 0; i < runs; i++){
+  }
+}
+
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* Protected functions                                                                                                */
 /*--------------------------------------------------------------------------------------------------------------------*/
 // This function sends the ir signal from the board to the car
-void send_signal(int code1, int code2)
+void send_signal(u32 code1, u32 code2, u16 start)
 {
-  if (code1 == delay_code1 && code2 == delay_code2) 
-    {
-        if (messagecount < 4)
-            messagecount++;
-    } else 
-    {
-        delay_code1 = code1;
-        delay_code2 = code2;
-        messagecount = 0;
-    }
+  if (code1 == delay_code1 && code2 == delay_code2){
+      if (messagecount < 4)
+           messagecount++;
+  } 
+  else {
+      delay_code1 = code1;
+      delay_code2 = code2;
+      messagecount = 0;
+  }
 	
-    //cli(); // make it uninterruptable
-    start_stop_bit();
+  //cli(); // make it uninterruptable
+  startStopSignal(start);
 
-    int x = 128;
-    while (x) {
-        oscillationWrite(_IR_Pin, 156);
+  int x = 128;
+  while (x) {
+      writeSignal(IR_PIN, 156, start);
 
-        if (code1 & x) //high bit
-            delayMicroseconds(546);
-        else //low bit
-            delayMicroseconds(260);
+      if (code1 & x) //high bit
+          delayMicro(546, start);
+      else //low bit
+          delayMicro(260, start);
 
-        x >>= 1; //next bit
-    }
+      x >>= 1; //next bit
+  }
 
-    x = 128;
-    while (x) {
-        oscillationWrite(_IR_Pin, 156);
+  x = 128;
+  while (x) {
+      writeSignal(IR_PIN, 156, start);
 
-        if (code2 & x) // high bit
-            delayMicroseconds(546);
-        else //low bit
-            delayMicroseconds(260);
+      if (code2 & x) // high bit
+          delayMicro(546, start);
+      else //low bit
+          delayMicro(260, start);
 
-        x >>= 1; //next bit
-    }
-    start_stop_bit();
-    //sei();
+      x >>= 1; //next bit
+  }
+  startStopSignal(start);
+  //sei();
 }
 
 // This function sends the codes to start the transmission and delays for the manditory time
-void start_stop_bit() {
-    oscillationWrite(_IR_Pin, 156);
-    delayMicroseconds(1014);
+void startStopSignal(u16 start) 
+{
+    writeSignal(IR_PIN, 156, start);
+    delayMicro(1014, start);
 }
 
 // This function actually sends the signal to the pin in the form of ones and zeros.
-void oscillationWrite(int pin, int time) {
+void writeSignal(u32 pin, u32 time, u16 start) 
+{
     for (int i = 0; i <= time / 26; i++) {
-        digitalWrite(pin, HIGH);
-        delayMicroseconds(9);
-        digitalWrite(pin, LOW);
-        delayMicroseconds(9);
+        writePin(pin, HIGH);
+        delayMicro(9,start);
+        writePin(pin, LOW);
+        delayMicro(9, start);
     }
 }
 
 // This function inplements the timeout for lost IR
-void pause(int channel, int count) {
+/*void pause(u8 channel, u8 count) 
+{
     unsigned char a = 0;
 
     if (count == 0)
@@ -167,8 +176,8 @@ void pause(int channel, int count) {
     else if (count == 3 || count == 4)
         a = (6 + 2 * channel);
 
-    delay(a * 16);
-}
+    delayMicro(a * 1600, start);
+}*/
 /*--------------------------------------------------------------------------------------------------------------------
 Function: ir_remoteInitialize
 
@@ -232,7 +241,7 @@ State Machine Function Definitions
 /* Wait for ??? */
 static void ir_remoteSM_Idle(void)
 {
-
+  
 } /* end ir_remoteSM_Idle() */
     
 

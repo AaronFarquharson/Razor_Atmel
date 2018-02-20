@@ -21,6 +21,7 @@ Runs current task state.  Should only be called once in main loop.
 **********************************************************************************************************************/
 
 #include "configuration.h"
+#include "ir_remote.h"
 
 /***********************************************************************************************************************
 Global variable definitions with scope across entire project.
@@ -122,7 +123,31 @@ State Machine Function Definitions
 /* Wait for ??? */
 static void UserApp2SM_Idle(void)
 {
-    
+  static u16 start = 8000;
+  if(IsButtonPressed(BUTTON0)){
+    LedOff(RED);
+    LedOn(GREEN);
+    singleOut(0, PWM_FWD7, DRIVE, CH1, 8062);
+    start++;
+  }
+  if(IsButtonPressed(BUTTON1)){
+    LedOff(RED);
+    LedOn(BLUE);
+    singleOut(0, PWM_REV7, DRIVE, CH1, start);
+  }
+  if(IsButtonPressed(BUTTON2)){
+    singleOut(0, PWM_REV7, TURN, CH1, start);
+  }
+  if(IsButtonPressed(BUTTON3)){
+    singleOut(0, PWM_FWD7, TURN, CH1, start);
+  }
+  else{
+    LedOn(RED);
+    LedOff(GREEN);
+    LedOff(BLUE);
+    singleOut(0, PWM_BRK, DRIVE, CH1, start);
+    singleOut(0, PWM_BRK, TURN, CH1, start);
+  }
 } /* end UserApp2SM_Idle() */
      
 #if 0
