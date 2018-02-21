@@ -61,18 +61,19 @@ Function Declarations
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* Public functions                                                                                                   */
 /*--------------------------------------------------------------------------------------------------------------------*/
-void singleOut( u8 mode, u8 power, u8 rb, u8 ch, u16 start);
+void singleOut( u8 mode, u8 power, u8 rb, u8 ch);
 void writePin(u32 pin, u8 level);
-void delayMicro(u16 time, u16 start);
+void delayMicro(u16 time);
+//void delayMicro(u16 time, u16 start);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* Protected functions                                                                                                */
 /*--------------------------------------------------------------------------------------------------------------------*/
 void ir_remoteInitialize(void);
 void ir_remoteRunActiveState(void);
-void send_signal(u32 code1, u32 code2, u16 start);
-void writeSignal(u32 pin, u32 time, u16 start);
-void startStopSignal(u16 start);
+void send_signal(u32 code1, u32 code2);
+void writeSignal(u32 pin, u32 time);
+void startStopSignal(void);
 //void pause(u8 ch, u8 count);
 
 /*--------------------------------------------------------------------------------------------------------------------*/

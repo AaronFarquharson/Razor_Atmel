@@ -48,7 +48,6 @@ Variable names shall start with "UserApp2_" and be declared as static.
 static fnCode_type UserApp2_StateMachine;            /* The state machine function pointer */
 //static u32 UserApp2_u32Timeout;                      /* Timeout counter used across states */
 
-
 /**********************************************************************************************************************
 Function Definitions
 **********************************************************************************************************************/
@@ -128,15 +127,18 @@ static void UserApp2SM_fwd(void)
   if(!IsButtonPressed(BUTTON0)){
     LedOn(RED);
     LedOff(GREEN);
+    singleOut(0, PWM_BRK, DRIVE, CH1);
     UserApp2_StateMachine = UserApp2SM_Idle;
   }
   
   // if button 2 is pressed, turn left, and go to new state
   if(IsButtonPressed(BUTTON2)){
+    singleOut(0, PWM_REV7, TURN, CH1);
     UserApp2_StateMachine = UserApp2SM_fwd_lft;
   }
   // if button 3 is pressed, turn right, and go to new state
   if(IsButtonPressed(BUTTON3)){
+    singleOut(0, PWM_FWD7, TURN, CH1);
     UserApp2_StateMachine = UserApp2SM_fwd_rht;
   }  
 }
@@ -148,15 +150,18 @@ static void UserApp2SM_bck(void)
   if(!IsButtonPressed(BUTTON1)){
     LedOn(RED);
     LedOff(BLUE);
+    singleOut(0, PWM_BRK, DRIVE, CH1);
     UserApp2_StateMachine = UserApp2SM_Idle;
   }
   
   // if button 2 is pressed, turn left, and go to new state
   if(IsButtonPressed(BUTTON2)){
+    singleOut(0, PWM_REV7, TURN, CH1);
     UserApp2_StateMachine = UserApp2SM_bck_lft;
   }
   // if button 3 is pressed, turn right, and go to new state
   if(IsButtonPressed(BUTTON3)){
+    singleOut(0, PWM_FWD7, TURN, CH1);
     UserApp2_StateMachine = UserApp2SM_bck_rht;
   } 
 }
@@ -166,19 +171,25 @@ static void UserApp2SM_lft(void)
 {
   // if button 2 is no longer pressed, stop turning, and go back to idle
   if(!IsButtonPressed(BUTTON2)){
-    LedOn(RED);
     LedOff(PURPLE);
+    singleOut(0, PWM_BRK, TURN, CH1);
     UserApp2_StateMachine = UserApp2SM_Idle;
   }
   
   // if button 0 is pressed, go forward, and go to new state
   if(IsButtonPressed(BUTTON0)){
+    LedOff(RED);
+    LedOn(GREEN);
+    singleOut(0, PWM_FWD7, DRIVE, CH1);
     UserApp2_StateMachine = UserApp2SM_fwd_lft;
   }
   // if button 1 is pressed, go backward, and go to new state
   if(IsButtonPressed(BUTTON1)){
+    LedOff(RED);
+    LedOn(BLUE);
+    singleOut(0, PWM_REV7, DRIVE, CH1);
     UserApp2_StateMachine = UserApp2SM_bck_lft;
-  } 
+  }
 }
 
 /* in this state, the car is only turning right */
@@ -186,17 +197,23 @@ static void UserApp2SM_rht(void)
 {
   // if button 3 is no longer pressed, stop turning, and go back to idle
   if(!IsButtonPressed(BUTTON3)){
-    LedOn(RED);
     LedOff(YELLOW);
+    singleOut(0, PWM_BRK, TURN, CH1);
     UserApp2_StateMachine = UserApp2SM_Idle;
   }
   
   // if button 0 is pressed, go forward, and go to new state
   if(IsButtonPressed(BUTTON0)){
+    LedOff(RED);
+    LedOn(GREEN);
+    singleOut(0, PWM_FWD7, DRIVE, CH1);
     UserApp2_StateMachine = UserApp2SM_fwd_rht;
   }
   // if button 1 is pressed, go backward, and go to new state
   if(IsButtonPressed(BUTTON1)){
+    LedOff(RED);
+    LedOn(BLUE);
+    singleOut(0, PWM_REV7, DRIVE, CH1);
     UserApp2_StateMachine = UserApp2SM_bck_rht;
   }
 }
@@ -206,10 +223,14 @@ static void UserApp2SM_fwd_rht(void)
 {
   // if button 3 is no longer pressed, stop turning, and go back to another state
   if(!IsButtonPressed(BUTTON3)){
+    singleOut(0, PWM_BRK, TURN, CH1);
     UserApp2_StateMachine = UserApp2SM_fwd;
   }
   // if button 0 is no longer pressed, stop moving, and go back to another state
   if(!IsButtonPressed(BUTTON0)){
+    LedOff(GREEN);
+    LedOn(RED);
+    singleOut(0, PWM_BRK, DRIVE, CH1);
     UserApp2_StateMachine = UserApp2SM_rht;
   }
 }
@@ -219,10 +240,14 @@ static void UserApp2SM_fwd_lft(void)
 {
   // if button 2 is no longer pressed, stop turning, and go back to another state
   if(!IsButtonPressed(BUTTON2)){
+    singleOut(0, PWM_BRK, TURN, CH1);
     UserApp2_StateMachine = UserApp2SM_fwd;
   }
   // if button 0 is no longer pressed, stop moving, and go back to another state
   if(!IsButtonPressed(BUTTON0)){
+    LedOff(GREEN);
+    LedOn(RED);
+    singleOut(0, PWM_BRK, DRIVE, CH1);
     UserApp2_StateMachine = UserApp2SM_lft;
   }
 }
@@ -232,10 +257,14 @@ static void UserApp2SM_bck_rht(void)
 {
   // if button 3 is no longer pressed, stop turning, and go back to another state
   if(!IsButtonPressed(BUTTON3)){
+    singleOut(0, PWM_BRK, TURN, CH1);
     UserApp2_StateMachine = UserApp2SM_bck;
   }
   // if button 1 is no longer pressed, stop moving, and go back to another state
   if(!IsButtonPressed(BUTTON1)){
+    LedOff(BLUE);
+    LedOn(RED);
+    singleOut(0, PWM_BRK, DRIVE, CH1);
     UserApp2_StateMachine = UserApp2SM_rht;
   }
 }
@@ -245,10 +274,15 @@ static void UserApp2SM_bck_lft(void)
 {
   // if button 2 is no longer pressed, stop turning, and go back to another state
   if(!IsButtonPressed(BUTTON2)){
+    singleOut(0, PWM_BRK, TURN, CH1);
     UserApp2_StateMachine = UserApp2SM_bck;
   }
   // if button 1 is no longer pressed, stop moving, and go back to another state
   if(!IsButtonPressed(BUTTON1)){
+    LedOff(BLUE);
+    LedOn(RED);
+
+    singleOut(0, PWM_BRK, DRIVE, CH1);
     UserApp2_StateMachine = UserApp2SM_lft;
   }
 }
@@ -258,53 +292,33 @@ static void UserApp2SM_bck_lft(void)
 /* Wait for ??? */
 static void UserApp2SM_Idle(void)
 {
+  // drive forward
   if(IsButtonPressed(BUTTON0)){
     LedOn(GREEN);
     LedOff(RED);
+    singleOut(0, PWM_FWD7, DRIVE, CH1);
     UserApp2_StateMachine = UserApp2SM_fwd;
   }
+  //drive backward
   if(IsButtonPressed(BUTTON1)){
     LedOn(BLUE);
     LedOff(RED);
+    singleOut(0, PWM_REV7, DRIVE, CH1);
     UserApp2_StateMachine = UserApp2SM_bck;
   }
+  // turn left
   if(IsButtonPressed(BUTTON2)){
     LedOn(PURPLE);
-    LedOff(RED);
+    singleOut(0, PWM_REV7, TURN, CH1);
     UserApp2_StateMachine = UserApp2SM_lft;
   }
+  // turn right
   if(IsButtonPressed(BUTTON3)){
     LedOn(YELLOW);
-    LedOff(RED);
+    singleOut(0, PWM_FWD7, TURN, CH1);
     UserApp2_StateMachine = UserApp2SM_rht;
   }
-#if 0
-  static u16 start = 7000;
-  if(IsButtonPressed(BUTTON0)){
-    LedOff(RED);
-    LedOn(GREEN);
-    singleOut(0, PWM_FWD7, DRIVE, CH1, 8062);
-  }
-  if(IsButtonPressed(BUTTON1)){
-    LedOff(RED);
-    LedOn(BLUE);
-    singleOut(0, PWM_REV7, DRIVE, CH1, 7775);
-  }
-  if(IsButtonPressed(BUTTON2)){
-    singleOut(0, PWM_REV7, TURN, CH1, 7890);
-  }
-  if(IsButtonPressed(BUTTON3)){
-    singleOut(0, PWM_FWD7, TURN, CH1, 7219);
-    start++;
-  }
-  else{
-    LedOn(RED);
-    LedOff(GREEN);
-    LedOff(BLUE);
-    singleOut(0, PWM_BRK, DRIVE, CH1, start);
-    singleOut(0, PWM_BRK, TURN, CH1, start);
-  }
-#endif
+  //count++;
 } /* end UserApp2SM_Idle() */
      
 #if 0

@@ -60,7 +60,7 @@ Function Definitions
 /* Public functions                                                                                                   */
 /*--------------------------------------------------------------------------------------------------------------------*/
 // This function sets the correct nibbles for the single output mode as defined by the protocol
-void singleOut( u8 mode, u8 power, u8 rb, u8 ch, u16 start)
+void singleOut( u8 mode, u8 power, u8 rb, u8 ch)
 {
   int nibble1, nibble2, nibble3, nibble4;
   
@@ -71,7 +71,7 @@ void singleOut( u8 mode, u8 power, u8 rb, u8 ch, u16 start)
   nibble4 = 0xf ^ nibble1 ^ nibble2 ^ nibble3;
   
   //pause(ch, messagecount);
-  send_signal((nibble1 << 4) | nibble2, (nibble3 << 4) | nibble4, start);
+  send_signal((nibble1 << 4) | nibble2, (nibble3 << 4) | nibble4);
   
   if (ir_toggle[ch] == 0)
         ir_toggle[ch] = 8;
@@ -93,18 +93,29 @@ void writePin(u32 pin, u8 level)
 }
 
 // This function should delay the code for a given time in microseconds
+void delayMicro(u16 time)
+{
+  TimerSet(TIMER_CHANNEL1, 0);
+  TimerStart(TIMER_CHANNEL1);
+  while(((2.67*(double)TimerGetTime(TIMER_CHANNEL1))/(double)time) < 0.99){
+  }
+  TimerStop(TIMER_CHANNEL1);
+}
+#if 0
+// This function should delay the code for a given time in microseconds
 void delayMicro(u16 time, u16 start)
 {
   int runs = (int)(((double)time * (double)start) / (double)1000);
   for(int i = 0; i < runs; i++){
   }
 }
+#endif
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* Protected functions                                                                                                */
 /*--------------------------------------------------------------------------------------------------------------------*/
 // This function sends the ir signal from the board to the car
-void send_signal(u32 code1, u32 code2, u16 start)
+void send_signal(u32 code1, u32 code2)
 {
   if (code1 == delay_code1 && code2 == delay_code2){
       if (messagecount < 4)
@@ -117,50 +128,50 @@ void send_signal(u32 code1, u32 code2, u16 start)
   }
 	
   //cli(); // make it uninterruptable
-  startStopSignal(start);
+  startStopSignal();
 
   int x = 128;
   while (x) {
-      writeSignal(IR_PIN, 156, start);
+      writeSignal(IR_PIN, 156);
 
       if (code1 & x) //high bit
-          delayMicro(546, start);
+          delayMicro(546);
       else //low bit
-          delayMicro(260, start);
+          delayMicro(260);
 
       x >>= 1; //next bit
   }
 
   x = 128;
   while (x) {
-      writeSignal(IR_PIN, 156, start);
+      writeSignal(IR_PIN, 156);
 
       if (code2 & x) // high bit
-          delayMicro(546, start);
+          delayMicro(546);
       else //low bit
-          delayMicro(260, start);
+          delayMicro(260);
 
       x >>= 1; //next bit
   }
-  startStopSignal(start);
+  startStopSignal();
   //sei();
 }
 
 // This function sends the codes to start the transmission and delays for the manditory time
-void startStopSignal(u16 start) 
+void startStopSignal(void) 
 {
-    writeSignal(IR_PIN, 156, start);
-    delayMicro(1014, start);
+    writeSignal(IR_PIN, 156);
+    delayMicro(1014);
 }
 
 // This function actually sends the signal to the pin in the form of ones and zeros.
-void writeSignal(u32 pin, u32 time, u16 start) 
+void writeSignal(u32 pin, u32 time) 
 {
     for (int i = 0; i <= time / 26; i++) {
         writePin(pin, HIGH);
-        delayMicro(9,start);
+        delayMicro(9);
         writePin(pin, LOW);
-        delayMicro(9, start);
+        delayMicro(9);
     }
 }
 
