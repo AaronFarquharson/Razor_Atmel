@@ -70,7 +70,6 @@ void singleOut( u8 mode, u8 power, u8 rb, u8 ch)
   nibble3 = power;
   nibble4 = 0xf ^ nibble1 ^ nibble2 ^ nibble3;
   
-  //pause(ch, messagecount);
   send_signal((nibble1 << 4) | nibble2, (nibble3 << 4) | nibble4);
   
   if (ir_toggle[ch] == 0)
@@ -101,15 +100,6 @@ void delayMicro(u16 time)
   }
   TimerStop(TIMER_CHANNEL1);
 }
-#if 0
-// This function should delay the code for a given time in microseconds
-void delayMicro(u16 time, u16 start)
-{
-  int runs = (int)(((double)time * (double)start) / (double)1000);
-  for(int i = 0; i < runs; i++){
-  }
-}
-#endif
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* Protected functions                                                                                                */
@@ -127,7 +117,6 @@ void send_signal(u32 code1, u32 code2)
       messagecount = 0;
   }
 	
-  //cli(); // make it uninterruptable
   startStopSignal();
 
   int x = 128;
@@ -154,7 +143,6 @@ void send_signal(u32 code1, u32 code2)
       x >>= 1; //next bit
   }
   startStopSignal();
-  //sei();
 }
 
 // This function sends the codes to start the transmission and delays for the manditory time
@@ -175,20 +163,6 @@ void writeSignal(u32 pin, u32 time)
     }
 }
 
-// This function inplements the timeout for lost IR
-/*void pause(u8 channel, u8 count) 
-{
-    unsigned char a = 0;
-
-    if (count == 0)
-        a = 4 - channel;
-    else if (count == 1 || count == 2)
-        a = 5;
-    else if (count == 3 || count == 4)
-        a = (6 + 2 * channel);
-
-    delayMicro(a * 1600, start);
-}*/
 /*--------------------------------------------------------------------------------------------------------------------
 Function: ir_remoteInitialize
 
