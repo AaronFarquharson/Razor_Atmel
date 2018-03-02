@@ -39,6 +39,7 @@ bool IsButtonPressed(u32 u32Button_);
 bool WasButtonPressed(u32 u32Button_);
 void ButtonAcknowledge(u32 u32Button_);
 bool IsButtonHeld(u32 u32Button_, u32 u32ButtonHeldTime_);
+bool IsTwoButtonHeld(u32 button1, u32 button2, u32 u32ButtonHeldTime_);
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* Protected functions                                                                                                */

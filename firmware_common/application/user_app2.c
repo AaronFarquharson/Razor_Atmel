@@ -47,6 +47,11 @@ Variable names shall start with "UserApp2_" and be declared as static.
 ***********************************************************************************************************************/
 static fnCode_type UserApp2_StateMachine;            /* The state machine function pointer */
 //static u32 UserApp2_u32Timeout;                      /* Timeout counter used across states */
+static u8 fwdSpeed = PWM_FWD7;
+static u8 bckSpeed = PWM_REV7;
+static u8 speed = 7;
+static u8 unpressed = 0;
+static u8 * speedmsg = "Current speed = 7";
 
 /**********************************************************************************************************************
 Function Definitions
@@ -76,6 +81,9 @@ Promises:
 void UserApp2Initialize(void)
 {
   LedOn(RED);
+  LCDCommand(LCD_CLEAR_CMD);
+  LCDMessage(LINE1_START_ADDR,"IR Remote Control");
+  LCDMessage(LINE2_START_ADDR, speedmsg);
   /* If good initialization, set state to Idle */
   if( 1 )
   {
@@ -133,12 +141,12 @@ static void UserApp2SM_fwd(void)
   
   // if button 2 is pressed, turn left, and go to new state
   if(IsButtonPressed(BUTTON2)){
-    singleOut(0, PWM_REV7, TURN, CH1);
+    singleOut(0, bckSpeed, TURN, CH1);
     UserApp2_StateMachine = UserApp2SM_fwd_lft;
   }
   // if button 3 is pressed, turn right, and go to new state
   if(IsButtonPressed(BUTTON3)){
-    singleOut(0, PWM_FWD7, TURN, CH1);
+    singleOut(0, fwdSpeed, TURN, CH1);
     UserApp2_StateMachine = UserApp2SM_fwd_rht;
   }  
 }
@@ -156,12 +164,12 @@ static void UserApp2SM_bck(void)
   
   // if button 2 is pressed, turn left, and go to new state
   if(IsButtonPressed(BUTTON2)){
-    singleOut(0, PWM_REV7, TURN, CH1);
+    singleOut(0, bckSpeed, TURN, CH1);
     UserApp2_StateMachine = UserApp2SM_bck_lft;
   }
   // if button 3 is pressed, turn right, and go to new state
   if(IsButtonPressed(BUTTON3)){
-    singleOut(0, PWM_FWD7, TURN, CH1);
+    singleOut(0, fwdSpeed, TURN, CH1);
     UserApp2_StateMachine = UserApp2SM_bck_rht;
   } 
 }
@@ -180,14 +188,14 @@ static void UserApp2SM_lft(void)
   if(IsButtonPressed(BUTTON0)){
     LedOff(RED);
     LedOn(GREEN);
-    singleOut(0, PWM_FWD7, DRIVE, CH1);
+    singleOut(0, fwdSpeed, DRIVE, CH1);
     UserApp2_StateMachine = UserApp2SM_fwd_lft;
   }
   // if button 1 is pressed, go backward, and go to new state
   if(IsButtonPressed(BUTTON1)){
     LedOff(RED);
     LedOn(BLUE);
-    singleOut(0, PWM_REV7, DRIVE, CH1);
+    singleOut(0, bckSpeed, DRIVE, CH1);
     UserApp2_StateMachine = UserApp2SM_bck_lft;
   }
 }
@@ -206,14 +214,14 @@ static void UserApp2SM_rht(void)
   if(IsButtonPressed(BUTTON0)){
     LedOff(RED);
     LedOn(GREEN);
-    singleOut(0, PWM_FWD7, DRIVE, CH1);
+    singleOut(0, fwdSpeed, DRIVE, CH1);
     UserApp2_StateMachine = UserApp2SM_fwd_rht;
   }
   // if button 1 is pressed, go backward, and go to new state
   if(IsButtonPressed(BUTTON1)){
     LedOff(RED);
     LedOn(BLUE);
-    singleOut(0, PWM_REV7, DRIVE, CH1);
+    singleOut(0, bckSpeed, DRIVE, CH1);
     UserApp2_StateMachine = UserApp2SM_bck_rht;
   }
 }
@@ -288,6 +296,45 @@ static void UserApp2SM_bck_lft(void)
 }
 
 
+// this function is used to set the speed for the function
+static void UserApp2SM_setSpeed(void)
+{
+  if(WasButtonPressed(BUTTON3))
+  {
+    ButtonAcknowledge(BUTTON3);
+    speed++;
+  }
+  switch(speed){
+    case 1:
+      fwdSpeed = PWM_FWD1;
+      bckSpeed = PWM_REV1;
+    case 2:
+      fwdSpeed = PWM_FWD2;
+      bckSpeed = PWM_REV2;
+    case 3:
+      fwdSpeed = PWM_FWD3;
+      bckSpeed = PWM_REV3;
+    case 4:
+      fwdSpeed = PWM_FWD4;
+      bckSpeed = PWM_REV4;
+    case 5:
+      fwdSpeed = PWM_FWD5;
+      bckSpeed = PWM_REV5;
+    case 6:
+      fwdSpeed = PWM_FWD6;
+      bckSpeed = PWM_REV6;
+    case 7:
+      fwdSpeed = PWM_FWD7;
+      bckSpeed = PWM_REV7;
+  }
+  if(WasButtonPressed(BUTTON4)){
+    ButtonAcknowledge(BUTTON4);
+    LedOff(WHITE);
+    LedOn(RED);
+    UserApp2_StateMachine = UserApp2SM_Idle;
+  }
+}
+
 /*-------------------------------------------------------------------------------------------------------------------*/
 /* Wait for ??? */
 static void UserApp2SM_Idle(void)
@@ -296,29 +343,32 @@ static void UserApp2SM_Idle(void)
   if(IsButtonPressed(BUTTON0)){
     LedOn(GREEN);
     LedOff(RED);
-    singleOut(0, PWM_FWD7, DRIVE, CH1);
+    singleOut(0, fwdSpeed, DRIVE, CH1);
     UserApp2_StateMachine = UserApp2SM_fwd;
   }
   //drive backward
   if(IsButtonPressed(BUTTON1)){
     LedOn(BLUE);
     LedOff(RED);
-    singleOut(0, PWM_REV7, DRIVE, CH1);
+    singleOut(0, bckSpeed, DRIVE, CH1);
     UserApp2_StateMachine = UserApp2SM_bck;
   }
   // turn left
   if(IsButtonPressed(BUTTON2)){
     LedOn(PURPLE);
-    singleOut(0, PWM_REV7, TURN, CH1);
+    singleOut(0, bckSpeed, TURN, CH1);
     UserApp2_StateMachine = UserApp2SM_lft;
   }
   // turn right
   if(IsButtonPressed(BUTTON3)){
     LedOn(YELLOW);
-    singleOut(0, PWM_FWD7, TURN, CH1);
+    singleOut(0, fwdSpeed, TURN, CH1);
     UserApp2_StateMachine = UserApp2SM_rht;
   }
-  //count++;
+  if(WasButtonPressed(BUTTON4)){
+    ButtonAcknowledge(BUTTON4);
+    UserApp2_StateMachine = UserApp2SM_setSpeed;
+  }
 } /* end UserApp2SM_Idle() */
      
 #if 0

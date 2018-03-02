@@ -77,7 +77,7 @@ The order of the definitions below must match the order of the definitions provi
 #ifdef EIE1
 static const u32 Button_au32ButtonPins[TOTAL_BUTTONS] = 
 {
-  PA_17_BUTTON0, PB_00_BUTTON1, PB_01_BUTTON2, PB_02_BUTTON3
+  PA_17_BUTTON0, PB_00_BUTTON1, PB_01_BUTTON2, PB_02_BUTTON3, PB_04_BLADE_AN1
 };
 
 /* Control array for all buttons in system initialized for ButtonInitialize().  Array values correspond to ButtonConfigType fields: 
@@ -87,6 +87,7 @@ static ButtonConfigType Buttons_asArray[TOTAL_BUTTONS] =
  {BUTTON_ACTIVE_LOW, BUTTON_PORTB}, /* BUTTON1  */
  {BUTTON_ACTIVE_LOW, BUTTON_PORTB}, /* BUTTON2  */
  {BUTTON_ACTIVE_LOW, BUTTON_PORTB}, /* BUTTON3  */
+ {BUTTON_ACTIVE_HIGH, BUTTON_PORTB}, /* BLADE AN1 */
 };   
 #endif /* EIE1 */
 
@@ -220,6 +221,33 @@ bool IsButtonHeld(u32 u32Button_, u32 u32ButtonHeldTime_)
 
 } /* end IsButtonHeld() */
 
+/*----------------------------------------------------------------------------------------------------------------------
+Function: IsTwoButtonHeld
+
+Description:
+Queries to see if two buttons have been held for a certain time.  The buttons
+must still be pressed when this function is called if it is to return TRUE.
+
+Requires:
+  - button1 and button2 are valid button indexes
+  - u32ButtonHeldTime is a time in ms 
+ 
+Promises:
+  - Returns TRUE if button1 and button2 have been held longer than u32ButtonHeldTime_
+*/
+
+bool IsTwoButtonHeld(u32 button1, u32 button2, u32 u32ButtonHeldTime_)
+{
+ if( IsButtonPressed(button1) && IsButtonPressed(button2) &&
+     IsTimeUp(&Button_au32HoldTimeStart[button1], u32ButtonHeldTime_ ) )
+ {
+   return(TRUE);
+ }
+ else
+ {
+   return(FALSE);
+ }
+}
 
 /*--------------------------------------------------------------------------------------------------------------------*/
 /* Protected Functions */

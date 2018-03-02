@@ -53,7 +53,9 @@ static void UserApp2SM_fwd_lft(void);
 static void UserApp2SM_bck_rht(void);
 static void UserApp2SM_bck_lft(void);
 static void UserApp2SM_Error(void);         
-static void UserApp2SM_FailedInit(void);        
+static void UserApp2SM_FailedInit(void);
+
+static void UserApp2SM_setSpeed(void);
 
 
 #endif /* __USER_APP2_H */
