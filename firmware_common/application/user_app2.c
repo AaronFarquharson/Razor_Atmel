@@ -50,8 +50,8 @@ static fnCode_type UserApp2_StateMachine;            /* The state machine functi
 static u8 fwdSpeed = PWM_FWD7;
 static u8 bckSpeed = PWM_REV7;
 static u8 speed = 7;
-static u8 unpressed = 0;
 static u8 * speedmsg = "Current speed = 7";
+static u8 * newspeed = "New speed = 7";
 
 /**********************************************************************************************************************
 Function Definitions
@@ -141,12 +141,12 @@ static void UserApp2SM_fwd(void)
   
   // if button 2 is pressed, turn left, and go to new state
   if(IsButtonPressed(BUTTON2)){
-    singleOut(0, bckSpeed, TURN, CH1);
+    singleOut(0, PWM_REV7, TURN, CH1);
     UserApp2_StateMachine = UserApp2SM_fwd_lft;
   }
   // if button 3 is pressed, turn right, and go to new state
   if(IsButtonPressed(BUTTON3)){
-    singleOut(0, fwdSpeed, TURN, CH1);
+    singleOut(0, PWM_FWD7, TURN, CH1);
     UserApp2_StateMachine = UserApp2SM_fwd_rht;
   }  
 }
@@ -164,12 +164,12 @@ static void UserApp2SM_bck(void)
   
   // if button 2 is pressed, turn left, and go to new state
   if(IsButtonPressed(BUTTON2)){
-    singleOut(0, bckSpeed, TURN, CH1);
+    singleOut(0, PWM_REV7, TURN, CH1);
     UserApp2_StateMachine = UserApp2SM_bck_lft;
   }
   // if button 3 is pressed, turn right, and go to new state
   if(IsButtonPressed(BUTTON3)){
-    singleOut(0, fwdSpeed, TURN, CH1);
+    singleOut(0, PWM_FWD7, TURN, CH1);
     UserApp2_StateMachine = UserApp2SM_bck_rht;
   } 
 }
@@ -303,33 +303,63 @@ static void UserApp2SM_setSpeed(void)
   {
     ButtonAcknowledge(BUTTON3);
     speed++;
+    if(speed > 7)
+    {
+      speed = 1;
+    }
+    switch(speed){
+      case 1:
+        speedmsg = "Current speed = 1";
+        newspeed = "New speed = 1";
+        fwdSpeed = PWM_FWD1;
+        bckSpeed = PWM_REV1;
+        break;
+      case 2:
+        speedmsg = "Current speed = 2";
+        newspeed = "New speed = 2";
+        fwdSpeed = PWM_FWD2;
+        bckSpeed = PWM_REV2;
+        break;
+      case 3:
+        speedmsg = "Current speed = 3";
+        newspeed = "New speed = 3";
+        fwdSpeed = PWM_FWD3;
+        bckSpeed = PWM_REV3;
+        break;
+      case 4:
+        speedmsg = "Current speed = 4";
+        newspeed = "New speed = 4";
+        fwdSpeed = PWM_FWD4;
+        bckSpeed = PWM_REV4;
+        break;
+      case 5:
+        speedmsg = "Current speed = 5";
+        newspeed = "New speed = 5";
+        fwdSpeed = PWM_FWD5;
+        bckSpeed = PWM_REV5;
+        break;
+      case 6:
+        speedmsg = "Current speed = 6";
+        newspeed = "New speed = 6";
+        fwdSpeed = PWM_FWD6;
+        bckSpeed = PWM_REV6;
+        break;
+      case 7:
+        speedmsg = "Current speed = 7";
+        newspeed = "New speed = 7";
+        fwdSpeed = PWM_FWD7;
+        bckSpeed = PWM_REV7;
+        break;
+    }
+    LCDMessage(LINE1_START_ADDR, newspeed);
   }
-  switch(speed){
-    case 1:
-      fwdSpeed = PWM_FWD1;
-      bckSpeed = PWM_REV1;
-    case 2:
-      fwdSpeed = PWM_FWD2;
-      bckSpeed = PWM_REV2;
-    case 3:
-      fwdSpeed = PWM_FWD3;
-      bckSpeed = PWM_REV3;
-    case 4:
-      fwdSpeed = PWM_FWD4;
-      bckSpeed = PWM_REV4;
-    case 5:
-      fwdSpeed = PWM_FWD5;
-      bckSpeed = PWM_REV5;
-    case 6:
-      fwdSpeed = PWM_FWD6;
-      bckSpeed = PWM_REV6;
-    case 7:
-      fwdSpeed = PWM_FWD7;
-      bckSpeed = PWM_REV7;
-  }
-  if(WasButtonPressed(BUTTON4)){
-    ButtonAcknowledge(BUTTON4);
-    LedOff(WHITE);
+  
+  if(!IsButtonPressed(BUTTON4)){
+    LCDCommand(LCD_CLEAR_CMD);
+    LCDMessage(LINE1_START_ADDR,"IR Remote Control");
+    LCDMessage(LINE2_START_ADDR, speedmsg);
+    LedOn(LCD_RED);
+    LedOff(LCD_GREEN);
     LedOn(RED);
     UserApp2_StateMachine = UserApp2SM_Idle;
   }
@@ -356,17 +386,22 @@ static void UserApp2SM_Idle(void)
   // turn left
   if(IsButtonPressed(BUTTON2)){
     LedOn(PURPLE);
-    singleOut(0, bckSpeed, TURN, CH1);
+    singleOut(0, PWM_REV7, TURN, CH1);
     UserApp2_StateMachine = UserApp2SM_lft;
   }
   // turn right
   if(IsButtonPressed(BUTTON3)){
     LedOn(YELLOW);
-    singleOut(0, fwdSpeed, TURN, CH1);
+    singleOut(0, PWM_FWD7, TURN, CH1);
     UserApp2_StateMachine = UserApp2SM_rht;
   }
-  if(WasButtonPressed(BUTTON4)){
-    ButtonAcknowledge(BUTTON4);
+  if(IsButtonPressed(BUTTON4)){
+    LedOff(LCD_RED);
+    LedOn(LCD_GREEN);
+    LedOff(RED);
+    LCDCommand(LCD_CLEAR_CMD);
+    LCDMessage(LINE1_START_ADDR, newspeed);
+    LCDMessage(LINE2_START_ADDR, "Press right to set");
     UserApp2_StateMachine = UserApp2SM_setSpeed;
   }
 } /* end UserApp2SM_Idle() */
