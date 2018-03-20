@@ -56,6 +56,7 @@ static void UserApp2SM_Error(void);
 static void UserApp2SM_FailedInit(void);
 
 static void UserApp2SM_setSpeed(void);
+static void UserApp2SM_setChannel(void);
 
 
 #endif /* __USER_APP2_H */

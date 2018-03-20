@@ -72,6 +72,7 @@ void singleOut( u8 mode, u8 power, u8 rb, u8 ch)
   
   send_signal((nibble1 << 4) | nibble2, (nibble3 << 4) | nibble4);
   
+  // set the top bit of the toggle to 1
   if (ir_toggle[ch] == 0)
         ir_toggle[ch] = 8;
   else
@@ -86,12 +87,14 @@ void writePin(u32 pin, u8 level)
   if(level == HIGH){
     AT91C_BASE_PIOA->PIO_SODR |= pin;
   }
+  // set the level to output low
   else{
     AT91C_BASE_PIOA->PIO_CODR |= pin;
   }  
 }
 
 // This function should delay the code for a given time in microseconds
+// This function uses the timer onboard that has a 2.67us tick
 void delayMicro(u16 time)
 {
   TimerSet(TIMER_CHANNEL1, 0);
@@ -156,8 +159,10 @@ void startStopSignal(void)
 void writeSignal(u32 pin, u32 time) 
 {
     for (int i = 0; i <= time / 26; i++) {
+        // the following two lines of code should take about 13us, thus the time/26
         writePin(pin, HIGH);
         delayMicro(9);
+        // the following two lines of code should take about 13us, thus the time/26
         writePin(pin, LOW);
         delayMicro(9);
     }

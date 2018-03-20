@@ -52,6 +52,8 @@ static u8 bckSpeed = PWM_REV7;
 static u8 speed = 7;
 static u8 * speedmsg = "Current speed = 7";
 static u8 * newspeed = "New speed = 7";
+static u8 * newchannel = "New channel = 1";
+static u8 channel = CH1;
 
 /**********************************************************************************************************************
 Function Definitions
@@ -135,18 +137,18 @@ static void UserApp2SM_fwd(void)
   if(!IsButtonPressed(BUTTON0)){
     LedOn(RED);
     LedOff(GREEN);
-    singleOut(0, PWM_BRK, DRIVE, CH1);
+    singleOut(0, PWM_BRK, DRIVE, channel);
     UserApp2_StateMachine = UserApp2SM_Idle;
   }
   
   // if button 2 is pressed, turn left, and go to new state
   if(IsButtonPressed(BUTTON2)){
-    singleOut(0, PWM_REV7, TURN, CH1);
+    singleOut(0, PWM_REV7, TURN, channel);
     UserApp2_StateMachine = UserApp2SM_fwd_lft;
   }
   // if button 3 is pressed, turn right, and go to new state
   if(IsButtonPressed(BUTTON3)){
-    singleOut(0, PWM_FWD7, TURN, CH1);
+    singleOut(0, PWM_FWD7, TURN, channel);
     UserApp2_StateMachine = UserApp2SM_fwd_rht;
   }  
 }
@@ -158,18 +160,18 @@ static void UserApp2SM_bck(void)
   if(!IsButtonPressed(BUTTON1)){
     LedOn(RED);
     LedOff(BLUE);
-    singleOut(0, PWM_BRK, DRIVE, CH1);
+    singleOut(0, PWM_BRK, DRIVE, channel);
     UserApp2_StateMachine = UserApp2SM_Idle;
   }
   
   // if button 2 is pressed, turn left, and go to new state
   if(IsButtonPressed(BUTTON2)){
-    singleOut(0, PWM_REV7, TURN, CH1);
+    singleOut(0, PWM_REV7, TURN, channel);
     UserApp2_StateMachine = UserApp2SM_bck_lft;
   }
   // if button 3 is pressed, turn right, and go to new state
   if(IsButtonPressed(BUTTON3)){
-    singleOut(0, PWM_FWD7, TURN, CH1);
+    singleOut(0, PWM_FWD7, TURN, channel);
     UserApp2_StateMachine = UserApp2SM_bck_rht;
   } 
 }
@@ -180,7 +182,7 @@ static void UserApp2SM_lft(void)
   // if button 2 is no longer pressed, stop turning, and go back to idle
   if(!IsButtonPressed(BUTTON2)){
     LedOff(PURPLE);
-    singleOut(0, PWM_BRK, TURN, CH1);
+    singleOut(0, PWM_BRK, TURN, channel);
     UserApp2_StateMachine = UserApp2SM_Idle;
   }
   
@@ -188,14 +190,14 @@ static void UserApp2SM_lft(void)
   if(IsButtonPressed(BUTTON0)){
     LedOff(RED);
     LedOn(GREEN);
-    singleOut(0, fwdSpeed, DRIVE, CH1);
+    singleOut(0, fwdSpeed, DRIVE, channel);
     UserApp2_StateMachine = UserApp2SM_fwd_lft;
   }
   // if button 1 is pressed, go backward, and go to new state
   if(IsButtonPressed(BUTTON1)){
     LedOff(RED);
     LedOn(BLUE);
-    singleOut(0, bckSpeed, DRIVE, CH1);
+    singleOut(0, bckSpeed, DRIVE, channel);
     UserApp2_StateMachine = UserApp2SM_bck_lft;
   }
 }
@@ -206,7 +208,7 @@ static void UserApp2SM_rht(void)
   // if button 3 is no longer pressed, stop turning, and go back to idle
   if(!IsButtonPressed(BUTTON3)){
     LedOff(YELLOW);
-    singleOut(0, PWM_BRK, TURN, CH1);
+    singleOut(0, PWM_BRK, TURN, channel);
     UserApp2_StateMachine = UserApp2SM_Idle;
   }
   
@@ -214,14 +216,14 @@ static void UserApp2SM_rht(void)
   if(IsButtonPressed(BUTTON0)){
     LedOff(RED);
     LedOn(GREEN);
-    singleOut(0, fwdSpeed, DRIVE, CH1);
+    singleOut(0, fwdSpeed, DRIVE, channel);
     UserApp2_StateMachine = UserApp2SM_fwd_rht;
   }
   // if button 1 is pressed, go backward, and go to new state
   if(IsButtonPressed(BUTTON1)){
     LedOff(RED);
     LedOn(BLUE);
-    singleOut(0, bckSpeed, DRIVE, CH1);
+    singleOut(0, bckSpeed, DRIVE, channel);
     UserApp2_StateMachine = UserApp2SM_bck_rht;
   }
 }
@@ -231,14 +233,14 @@ static void UserApp2SM_fwd_rht(void)
 {
   // if button 3 is no longer pressed, stop turning, and go back to another state
   if(!IsButtonPressed(BUTTON3)){
-    singleOut(0, PWM_BRK, TURN, CH1);
+    singleOut(0, PWM_BRK, TURN, channel);
     UserApp2_StateMachine = UserApp2SM_fwd;
   }
   // if button 0 is no longer pressed, stop moving, and go back to another state
   if(!IsButtonPressed(BUTTON0)){
     LedOff(GREEN);
     LedOn(RED);
-    singleOut(0, PWM_BRK, DRIVE, CH1);
+    singleOut(0, PWM_BRK, DRIVE, channel);
     UserApp2_StateMachine = UserApp2SM_rht;
   }
 }
@@ -248,14 +250,14 @@ static void UserApp2SM_fwd_lft(void)
 {
   // if button 2 is no longer pressed, stop turning, and go back to another state
   if(!IsButtonPressed(BUTTON2)){
-    singleOut(0, PWM_BRK, TURN, CH1);
+    singleOut(0, PWM_BRK, TURN, channel);
     UserApp2_StateMachine = UserApp2SM_fwd;
   }
   // if button 0 is no longer pressed, stop moving, and go back to another state
   if(!IsButtonPressed(BUTTON0)){
     LedOff(GREEN);
     LedOn(RED);
-    singleOut(0, PWM_BRK, DRIVE, CH1);
+    singleOut(0, PWM_BRK, DRIVE, channel);
     UserApp2_StateMachine = UserApp2SM_lft;
   }
 }
@@ -265,14 +267,14 @@ static void UserApp2SM_bck_rht(void)
 {
   // if button 3 is no longer pressed, stop turning, and go back to another state
   if(!IsButtonPressed(BUTTON3)){
-    singleOut(0, PWM_BRK, TURN, CH1);
+    singleOut(0, PWM_BRK, TURN, channel);
     UserApp2_StateMachine = UserApp2SM_bck;
   }
   // if button 1 is no longer pressed, stop moving, and go back to another state
   if(!IsButtonPressed(BUTTON1)){
     LedOff(BLUE);
     LedOn(RED);
-    singleOut(0, PWM_BRK, DRIVE, CH1);
+    singleOut(0, PWM_BRK, DRIVE, channel);
     UserApp2_StateMachine = UserApp2SM_rht;
   }
 }
@@ -282,7 +284,7 @@ static void UserApp2SM_bck_lft(void)
 {
   // if button 2 is no longer pressed, stop turning, and go back to another state
   if(!IsButtonPressed(BUTTON2)){
-    singleOut(0, PWM_BRK, TURN, CH1);
+    singleOut(0, PWM_BRK, TURN, channel);
     UserApp2_StateMachine = UserApp2SM_bck;
   }
   // if button 1 is no longer pressed, stop moving, and go back to another state
@@ -290,23 +292,27 @@ static void UserApp2SM_bck_lft(void)
     LedOff(BLUE);
     LedOn(RED);
 
-    singleOut(0, PWM_BRK, DRIVE, CH1);
+    singleOut(0, PWM_BRK, DRIVE, channel);
     UserApp2_StateMachine = UserApp2SM_lft;
   }
 }
 
 
-// this function is used to set the speed for the function
+/* this function is used to set the speed for the function */
 static void UserApp2SM_setSpeed(void)
 {
+  // press the right button to set the new speed
   if(WasButtonPressed(BUTTON3))
   {
     ButtonAcknowledge(BUTTON3);
     speed++;
+    // there are only seven speeds to cycle through
     if(speed > 7)
     {
       speed = 1;
     }
+    // for each of the following cases, we must set both the home screen message
+    // and the new speed message and forward and backward speeds
     switch(speed){
       case 1:
         speedmsg = "Current speed = 1";
@@ -351,9 +357,11 @@ static void UserApp2SM_setSpeed(void)
         bckSpeed = PWM_REV7;
         break;
     }
+    // cycle to the new message
     LCDMessage(LINE1_START_ADDR, newspeed);
   }
   
+  // reset all parameters as they were before
   if(!IsButtonPressed(BUTTON4)){
     LCDCommand(LCD_CLEAR_CMD);
     LCDMessage(LINE1_START_ADDR,"IR Remote Control");
@@ -365,6 +373,54 @@ static void UserApp2SM_setSpeed(void)
   }
 }
 
+#if 1
+/* this state allows the user to change the channel of operation of the car */
+static void UserApp2SM_setChannel(void)
+{
+  // press the right button to set the new channel
+  if(WasButtonPressed(BUTTON3))
+  {
+    ButtonAcknowledge(BUTTON3);
+    channel++;
+    // there are only four channels to cycle through
+    if(channel > 3)
+    {
+      channel = 0;
+    }
+    // for each of the following cases, a new message must be displayed on the LCD
+    switch(channel){
+      case 0:
+        newchannel = "New channel = 1";
+        channel = CH1;
+        break;
+      case 1:
+        newchannel = "New channel = 2";
+        channel = CH2;
+        break;
+      case 2:
+        newchannel = "New channel = 3";
+        channel = CH3;
+        break;
+      case 3:
+        newchannel = "New channel = 4";
+        channel = CH4;
+        break;
+    }
+    // cycle to the new message
+    LCDMessage(LINE1_START_ADDR, newchannel);
+  }
+  
+  // reset all parameters as they were before
+  if(!IsButtonPressed(BUTTON5)){
+    LCDCommand(LCD_CLEAR_CMD);
+    LCDMessage(LINE1_START_ADDR,"IR Remote Control");
+    LCDMessage(LINE2_START_ADDR, speedmsg);
+    LedOn(LCD_RED);
+    LedOn(RED);
+    UserApp2_StateMachine = UserApp2SM_Idle;
+  }
+}
+#endif
 /*-------------------------------------------------------------------------------------------------------------------*/
 /* Wait for ??? */
 static void UserApp2SM_Idle(void)
@@ -373,28 +429,29 @@ static void UserApp2SM_Idle(void)
   if(IsButtonPressed(BUTTON0)){
     LedOn(GREEN);
     LedOff(RED);
-    singleOut(0, fwdSpeed, DRIVE, CH1);
+    singleOut(0, fwdSpeed, DRIVE, channel);
     UserApp2_StateMachine = UserApp2SM_fwd;
   }
   //drive backward
   if(IsButtonPressed(BUTTON1)){
     LedOn(BLUE);
     LedOff(RED);
-    singleOut(0, bckSpeed, DRIVE, CH1);
+    singleOut(0, bckSpeed, DRIVE, channel);
     UserApp2_StateMachine = UserApp2SM_bck;
   }
   // turn left
   if(IsButtonPressed(BUTTON2)){
     LedOn(PURPLE);
-    singleOut(0, PWM_REV7, TURN, CH1);
+    singleOut(0, PWM_REV7, TURN, channel);
     UserApp2_StateMachine = UserApp2SM_lft;
   }
   // turn right
   if(IsButtonPressed(BUTTON3)){
     LedOn(YELLOW);
-    singleOut(0, PWM_FWD7, TURN, CH1);
+    singleOut(0, PWM_FWD7, TURN, channel);
     UserApp2_StateMachine = UserApp2SM_rht;
   }
+  // set speed
   if(IsButtonPressed(BUTTON4)){
     LedOff(LCD_RED);
     LedOn(LCD_GREEN);
@@ -403,6 +460,15 @@ static void UserApp2SM_Idle(void)
     LCDMessage(LINE1_START_ADDR, newspeed);
     LCDMessage(LINE2_START_ADDR, "Press right to set");
     UserApp2_StateMachine = UserApp2SM_setSpeed;
+  }
+  // set channel
+  if(IsButtonPressed(BUTTON5)){
+    LedOff(LCD_RED);
+    LedOff(RED);
+    LCDCommand(LCD_CLEAR_CMD);
+    LCDMessage(LINE1_START_ADDR, newchannel);
+    LCDMessage(LINE2_START_ADDR, "Press right to set");
+    UserApp2_StateMachine = UserApp2SM_setChannel;
   }
 } /* end UserApp2SM_Idle() */
      

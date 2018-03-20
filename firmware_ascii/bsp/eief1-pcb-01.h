@@ -600,7 +600,7 @@ counter must be set at 1280. */
     00 [0] PA_00_TP54 not controlled by peripheral
 */
 
-#define PIOB_PDR_INIT (u32)0x00400048
+#define PIOB_PDR_INIT (u32)0x00400058
 /*
     31 [0] PB_31_ 
     30 [0] PB_30_ 
